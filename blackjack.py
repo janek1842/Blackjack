@@ -14,7 +14,7 @@ class DataBase:
                         money integer default 0,
                         isActive int default 0,
                         isAdmin int default 0,
-                        avatar text default 'images/default.png'
+                        avatar text default 'images/avatars/default.png'
                 ) ''')
 
                 cur.execute(''' CREATE TABLE if not exists statistics (
@@ -66,7 +66,6 @@ class DataBase:
                 playerID= cur.fetchone()[0]
                 cur.execute("INSERT INTO statistics values('{}',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) ".format(playerID))
                 playerChecker = True
-
             else:
                 print("Username: ",username," already exists")
                 playerChecker = False
@@ -167,16 +166,6 @@ class DataBase:
             cur.execute('UPDATE players SET username=?,password=?,avatar=? where playerID =?', (newUsername,crypter.encrypt_message(newPassword),avatar,playerID,))
             con.commit()
 
-
-
-
-
-
-
-
-
-
-
 def testPlayers():
     con = sqlite3.connect('database.db')
     cur = con.cursor()
@@ -193,7 +182,6 @@ def testStat():
     con.commit()
     con.close()
 
-# TEST
 
 
 

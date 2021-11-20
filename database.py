@@ -56,9 +56,6 @@ c.execute("INSERT INTO statistics values('{}',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) "
 c.execute("INSERT INTO statistics values('{}',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) ".format(3))
 c.execute("INSERT INTO statistics values('{}',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) ".format(4))
 c.execute("INSERT INTO statistics values('{}',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) ".format(5))
-#c.execute("INSERT INTO cards values(null,1,null,null,null,null,null,null,null,null,null,null,null,null,null)")
-
-#c.execute("SELECT cardID, max(amount) FROM players p ,cards c where p.username='Ciota' and p.playerID=c.playerID ")
 
 c.fetchall()
 conn.commit()

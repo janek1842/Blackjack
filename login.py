@@ -249,9 +249,10 @@ class Ui_LoginDialog(object):
             if (result):
                 pass
             else:
-                db.addPlayer(self.loginInput_2.text(), self.password1Input.text(), ".")
+                db.addPlayer(self.loginInput_2.text(), self.password1Input.text(), "/images/avatars/default.png")
                 blackjack.testPlayers()
                 mainResult = True
+                print("Pomyślnie dodano uzytkownika")
             self.errorLabel2.setStyleSheet("color: #b1f900")
             self.errorLabel2.setText("Succesfully created")
             return mainResult
