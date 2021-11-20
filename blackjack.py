@@ -11,9 +11,10 @@ class DataBase:
                         playerID integer primary key autoincrement,
                         username  text not null unique ,
                         password text,
-                        isActive int default false,
-                        isAdmin int default true,
-                        avatar text default null
+                        money integer default 0,
+                        isActive int default 0,
+                        isAdmin int default 0,
+                        avatar text default 'images/default.png'
                 ) ''')
 
                 cur.execute(''' CREATE TABLE if not exists statistics (
@@ -60,7 +61,7 @@ class DataBase:
             cur = con.cursor()
             playerChecker = False
             if(self.checkIfPlayerExists(username)==False):
-                cur.execute("INSERT INTO players values(null,'{}','{}',0,0,'{}') ".format(username,crypter.encrypt_message(password),avatar))
+                cur.execute("INSERT INTO players values(null,'{}','{}',0,0,0,'images/default.png') ".format(username,crypter.encrypt_message(password)))
                 cur.execute('SELECT playerID FROM players where username=?',(username,))
                 playerID= cur.fetchone()[0]
                 cur.execute("INSERT INTO statistics values('{}',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) ".format(playerID))
@@ -74,9 +75,7 @@ class DataBase:
             return playerChecker
 
         def validateLogin(self,username,password):
-
             result = False
-
             if(self.checkIfPlayerExists(username)==False):
                 pass
             else:
@@ -88,11 +87,95 @@ class DataBase:
             cur = con.cursor()
             result=False
             cur.execute('SELECT password FROM players where username =?', (username,))
+            print("oto1")
             dbPassword = crypter.decrypt_message(cur)
+
             if(dbPassword==password):
                 result=True
-            con.close()
+
             return result
+
+        def getPlayer(self,username):
+            con = sqlite3.connect('database.db')
+            cur = con.cursor()
+            cur.execute('SELECT username,money,isActive,isAdmin,avatar FROM players where username =?', (username,))
+            player = cur.fetchall()
+            player = {"username":player[0][0],"money":player[0][1],"isActive":player[0][2],"isAdmin":player[0][3],"avatar":player[0][4]}
+            return player
+
+        def makeBanned(self,username):
+            con = sqlite3.connect('database.db')
+            cur = con.cursor()
+            cur.execute('UPDATE players SET isActive=0 where username =?',(username,))
+            con.commit()
+
+        def makeUnBanned(self,username):
+            con = sqlite3.connect('database.db')
+            cur = con.cursor()
+            cur.execute('UPDATE players SET isActive=1 where username =?',(username,))
+            con.commit()
+
+        def makeAdmin(self,username):
+            con = sqlite3.connect('database.db')
+            cur = con.cursor()
+            cur.execute('UPDATE players SET isAdmin=1 where username =?', (username,))
+            con.commit()
+
+        def getCardStatistics(self,username):
+            con = sqlite3.connect('database.db')
+            cur = con.cursor()
+            cur.execute('SELECT * FROM statistics where playerID = (SELECT playerID FROM players WHERE username =?)',(username,))
+            statSet = cur.fetchall()
+            statistics = {"2":statSet[0][1],"3":statSet[0][2],"4":statSet[0][3],"5":statSet[0][4],"6":statSet[0][5]
+                          ,"7":statSet[0][6],"8":statSet[0][7],"9":statSet[0][8],"10":statSet[0][9],"J":statSet[0][10],
+                          "Q":statSet[0][11],"K":statSet[0][12],"A":statSet[0][13]}
+            return statistics
+
+        def getPlayerStatistics(self,username):
+            con = sqlite3.connect('database.db')
+            cur = con.cursor()
+            cur.execute('SELECT * FROM statistics where playerID = (SELECT playerID FROM players WHERE username =?)', (username,))
+            playerStatSet = cur.fetchall()
+
+            winRatio = self.getProperStatToAvoidZeroDivision(playerStatSet[0][15],playerStatSet[0][14])
+            averageTime = self.getProperStatToAvoidZeroDivision(playerStatSet[0][16], playerStatSet[0][14])
+            mostPickedCard = max(self.getCardStatistics(username), key=self.getCardStatistics(username).get)
+            cardsGotten = sum((self.getCardStatistics(username).values()))
+
+            playerStatistics = {"HandsPlayed":playerStatSet[0][14],"WonHands":playerStatSet[0][15],"WinRatio":winRatio,
+                                "AverageTimeToMove":averageTime,"MostPickedCard":mostPickedCard,"CardsGotten":cardsGotten}
+            return playerStatistics
+
+        def getProperStatToAvoidZeroDivision(self,nominator,denominator):
+            if(denominator==0):
+                return 0
+            else:
+                return (int(nominator)/int(denominator))
+
+        def getRank(self):
+            con = sqlite3.connect('database.db')
+            cur = con.cursor()
+            cur.execute('SELECT username,money FROM players ORDER BY money DESC')
+            rankStat = cur.fetchall()
+            return dict(rankStat)
+
+        def updateAccount(self,oldUsername,newUsername,newPassword,avatar):
+            con = sqlite3.connect('database.db')
+            cur = con.cursor()
+            cur.execute('SELECT playerID FROM players where username =?', (oldUsername,))
+            playerID = cur.fetchone()[0]
+            cur.execute('UPDATE players SET username=?,password=?,avatar=? where playerID =?', (newUsername,crypter.encrypt_message(newPassword),avatar,playerID,))
+            con.commit()
+
+
+
+
+
+
+
+
+
+
 
 def testPlayers():
     con = sqlite3.connect('database.db')
@@ -112,13 +195,7 @@ def testStat():
 
 # TEST
 
-# db = DataBase()
-# db.createTables()
-#
-# print(db.addPlayer("Jankersek","password","avatar"))
-#
-# testPlayers()
-# testStat()
+
 
 
 

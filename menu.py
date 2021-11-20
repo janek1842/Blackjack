@@ -9,6 +9,8 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+
+import blackjack
 from login import Ui_LoginDialog
 
 class Ui_MainWindow(object):
@@ -88,7 +90,7 @@ class Ui_MainWindow(object):
         self.mainMenuPage = QtWidgets.QWidget()
         self.mainMenuPage.setObjectName("mainMenuPage")
         self.verticalLayoutWidget = QtWidgets.QWidget(self.mainMenuPage)
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(890, 490, 351, 211))
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(790, 390, 251, 111))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
         self.verticalLayout_1 = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
         self.verticalLayout_1.setContentsMargins(0, 0, 0, 0)
@@ -915,7 +917,7 @@ class Ui_MainWindow(object):
 
 if __name__ == "__main__":
     import sys
-
+    print(blackjack.testPlayers())
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = Ui_MainWindow()

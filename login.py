@@ -196,21 +196,23 @@ class Ui_LoginDialog(object):
             print("good to go")
             self.loginUser(self.loginInput.text(), self.passwordInput.text())
 
+
     def loginUser(self, login, password):
-
+        db = blackjack.DataBase()
         result = db.validateLogin(login, password)
-
         if (result):
             print("UDANE LOGOWANIE !")
         else:
             self.errorLabel1.setText("UNSUCCESFULL !")
+
+
 
         # tutaj zapytania do bazy dac z tymi danymi
         # pierwsze czy istnieje, jesli tak to drugie zapytanie sprawdzic haslo
         # lub od razu sprawdzic oba  NIE WIEM XD
         # jesli sie zgadza to zalogowano(jeszcze jakos do menu glownego to przekazac)
         # jesli nie to errorLabel1 dac na unsucesfull
-        print("logowanie")
+
 
     def newUserValidation(self):
         self.errorLabel2.setStyleSheet("color: red")
@@ -247,7 +249,7 @@ class Ui_LoginDialog(object):
             if (result):
                 pass
             else:
-                db.addPlayer(self.loginInput_2.text(), self.password1Input.text(), "avatar.png")
+                db.addPlayer(self.loginInput_2.text(), self.password1Input.text(), ".")
                 blackjack.testPlayers()
                 mainResult = True
             self.errorLabel2.setStyleSheet("color: #b1f900")
@@ -257,9 +259,8 @@ class Ui_LoginDialog(object):
 
 if __name__ == "__main__":
     import sys
-
-    db = blackjack.DataBase()
-    db.createTables()
+    print('system')
+    # db = blackjack.DataBase()
     blackjack.testPlayers()
     app = QtWidgets.QApplication(sys.argv)
     LoginDialog = QtWidgets.QDialog()

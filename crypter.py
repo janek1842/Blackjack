@@ -4,6 +4,7 @@ import os
 import sqlite3
 from cryptography.fernet import Fernet
 import base64
+import os
 
 def generate_key():
     key = Fernet.generate_key()
@@ -16,11 +17,21 @@ def load_key():
     """
     return open("secret.key", "rb").read()
 
+def changeGenerator():
+    keyGenerator=False
+
+
 def encrypt_message(message):
     """
     Encrypts a message
     """
-    generate_key()
+    global keyGenerator
+
+    if(not os.path.isfile('./secret.key')):
+        generate_key()
+    else:
+        pass
+
     key = load_key()
     encoded_message = message.encode()
     f = Fernet(key)
