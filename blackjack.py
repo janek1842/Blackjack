@@ -103,6 +103,15 @@ class DataBase:
             player = {"username":player[0][0],"money":player[0][1],"isActive":player[0][2],"isAdmin":player[0][3],"avatar":player[0][4],"description":player[0][5]}
             return player
 
+        def getPlayers(self):
+            con = sqlite3.connect('database.db')
+            cur = con.cursor()
+            cur.execute('SELECT username,money,isActive,isAdmin,avatar,description FROM players ')
+            player = cur.fetchall()
+            player = {"username": player[0][0], "money": player[0][1], "isActive": player[0][2],
+                      "isAdmin": player[0][3], "avatar": player[0][4], "description": player[0][5]}
+            return player
+
         def makeBanned(self,username):
             con = sqlite3.connect('database.db')
             cur = con.cursor()
