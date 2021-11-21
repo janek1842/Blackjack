@@ -155,9 +155,9 @@ class DataBase:
         def getRank(self):
             con = sqlite3.connect('database.db')
             cur = con.cursor()
-            cur.execute('SELECT username,money FROM players ORDER BY money DESC')
+            cur.execute('SELECT username,money,IIF(gameAmount=0,0,winsAmount/gameAmount) FROM players,statistics where statistics.playerID=players.playerID ORDER BY money DESC')
             rankStat = cur.fetchall()
-            return dict(rankStat)
+            return rankStat
 
         def updateAccount(self,oldUsername,newUsername,newPassword,avatar,description):
             con = sqlite3.connect('database.db')
@@ -183,7 +183,7 @@ def testStat():
     con.commit()
     con.close()
 
-
+db = DataBase()
 
 
 
