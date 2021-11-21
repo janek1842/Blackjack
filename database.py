@@ -18,7 +18,8 @@ c.execute(''' CREATE TABLE if not exists players (
         money integer default 0,
         isActive integer default 0,
         isAdmin integer,
-        avatar text
+        avatar text default 'images/avatars/default.png',
+        description text
 ) ''')
 
 c.execute(''' CREATE TABLE if not exists statistics (
@@ -46,11 +47,11 @@ c.execute(''' CREATE TABLE if not exists statistics (
 ) ''')
 
 
-c.execute("INSERT INTO players values(null,'player1','{}',1000,1,0,'images/default.png') ".format(crypter.encrypt_message("tajnehaslo")))
-c.execute("INSERT INTO players values(null,'player2','{}',2000,1,0,'images/default.png') ".format(crypter.encrypt_message("tajnehaslo")))
-c.execute("INSERT INTO players values(null,'player3','{}',3000,1,0,'images/default.png') ".format(crypter.encrypt_message("tajnehaslo")))
-c.execute("INSERT INTO players values(null,'player4','{}',4000,1,0,'images/default.png') ".format(crypter.encrypt_message("tajnehaslo")))
-c.execute("INSERT INTO players values(null,'player5','{}',5000,1,0,'images/default.png') ".format(crypter.encrypt_message("tajnehaslo")))
+c.execute("INSERT INTO players values(null,'player1','{}',1000,1,0,'images/default.png',null) ".format(crypter.encrypt_message("tajnehaslo")))
+c.execute("INSERT INTO players values(null,'player2','{}',2000,1,0,'images/default.png',null) ".format(crypter.encrypt_message("tajnehaslo")))
+c.execute("INSERT INTO players values(null,'player3','{}',3000,1,0,'images/default.png',null) ".format(crypter.encrypt_message("tajnehaslo")))
+c.execute("INSERT INTO players values(null,'player4','{}',4000,1,0,'images/default.png',null) ".format(crypter.encrypt_message("tajnehaslo")))
+c.execute("INSERT INTO players values(null,'player5','{}',5000,1,0,'images/default.png',null) ".format(crypter.encrypt_message("tajnehaslo")))
 c.execute("INSERT INTO statistics values('{}',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) ".format(1))
 c.execute("INSERT INTO statistics values('{}',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) ".format(2))
 c.execute("INSERT INTO statistics values('{}',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) ".format(3))

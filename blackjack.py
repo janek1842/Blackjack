@@ -14,7 +14,8 @@ class DataBase:
                         money integer default 0,
                         isActive int default 0,
                         isAdmin int default 0,
-                        avatar text default 'images/avatars/default.png'
+                        avatar text default 'images/avatars/default.png',
+                        description text
                 ) ''')
 
                 cur.execute(''' CREATE TABLE if not exists statistics (
@@ -97,9 +98,9 @@ class DataBase:
         def getPlayer(self,username):
             con = sqlite3.connect('database.db')
             cur = con.cursor()
-            cur.execute('SELECT username,money,isActive,isAdmin,avatar FROM players where username =?', (username,))
+            cur.execute('SELECT username,money,isActive,isAdmin,avatar,description FROM players where username =?', (username,))
             player = cur.fetchall()
-            player = {"username":player[0][0],"money":player[0][1],"isActive":player[0][2],"isAdmin":player[0][3],"avatar":player[0][4]}
+            player = {"username":player[0][0],"money":player[0][1],"isActive":player[0][2],"isAdmin":player[0][3],"avatar":player[0][4],"description":player[0][5]}
             return player
 
         def makeBanned(self,username):
@@ -158,12 +159,12 @@ class DataBase:
             rankStat = cur.fetchall()
             return dict(rankStat)
 
-        def updateAccount(self,oldUsername,newUsername,newPassword,avatar):
+        def updateAccount(self,oldUsername,newUsername,newPassword,avatar,description):
             con = sqlite3.connect('database.db')
             cur = con.cursor()
             cur.execute('SELECT playerID FROM players where username =?', (oldUsername,))
             playerID = cur.fetchone()[0]
-            cur.execute('UPDATE players SET username=?,password=?,avatar=? where playerID =?', (newUsername,crypter.encrypt_message(newPassword),avatar,playerID,))
+            cur.execute('UPDATE players SET username=?,password=?,avatar=?,description=? where playerID =?', (newUsername,crypter.encrypt_message(newPassword),avatar,description,playerID,))
             con.commit()
 
 def testPlayers():
@@ -181,7 +182,6 @@ def testStat():
     print(cur.fetchall())
     con.commit()
     con.close()
-
 
 
 
