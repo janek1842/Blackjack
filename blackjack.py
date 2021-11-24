@@ -103,6 +103,13 @@ class DataBase:
             player = {"username":player[0][0],"money":player[0][1],"isActive":player[0][2],"isAdmin":player[0][3],"avatar":player[0][4],"description":player[0][5]}
             return player
 
+        def getPlayer2(self,username):
+            con = sqlite3.connect('database.db')
+            cur = con.cursor()
+            cur.execute('SELECT username,avatar,isAdmin FROM players where username =?', (username,))
+            player = cur.fetchone()
+            return player
+
         def getPlayers(self):
             con = sqlite3.connect('database.db')
             cur = con.cursor()
@@ -110,6 +117,14 @@ class DataBase:
             player = cur.fetchall()
             player = {"username": player[0][0], "money": player[0][1], "isActive": player[0][2],
                       "isAdmin": player[0][3], "avatar": player[0][4], "description": player[0][5]}
+            return player
+
+        def getPlayers2(self):
+            con = sqlite3.connect('database.db')
+            cur = con.cursor()
+            cur.execute('SELECT username,isActive,isAdmin FROM players ')
+            player = cur.fetchall()
+            print(player)
             return player
 
         def makeBanned(self,username):
@@ -127,7 +142,13 @@ class DataBase:
         def makeAdmin(self,username):
             con = sqlite3.connect('database.db')
             cur = con.cursor()
-            cur.execute('UPDATE players SET isAdmin=1 where username =?', (username,))
+            cur.execute('UPDATE players SET isAdmin=1 where username =?',(username,))
+            con.commit()
+
+        def makeUser(self,username):
+            con = sqlite3.connect('database.db')
+            cur = con.cursor()
+            cur.execute('UPDATE players SET isAdmin=0 where username =?',(username,))
             con.commit()
 
         def getCardStatistics(self,username):

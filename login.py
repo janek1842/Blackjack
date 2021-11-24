@@ -10,10 +10,19 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import re
+
+from PyQt5.QtGui import QPixmap
+
 import blackjack
 
-
 class Ui_LoginDialog(object):
+    def __init__(self, user, stackedWidget, username, avatar):
+        self.user = user
+        self.stWid = stackedWidget
+        self.username = username
+        self.avatar = avatar
+
+
     def setupUi(self, LoginDialog):
         LoginDialog.setObjectName("LoginDialog")
         LoginDialog.resize(481, 210)
@@ -196,12 +205,28 @@ class Ui_LoginDialog(object):
             print("good to go")
             self.loginUser(self.loginInput.text(), self.passwordInput.text())
 
-
     def loginUser(self, login, password):
         db = blackjack.DataBase()
         result = db.validateLogin(login, password)
+        print(result)
         if (result):
             print("UDANE LOGOWANIE !")
+            self.stWid.setCurrentIndex(1)       #ustawienie graficzne
+            font = QtGui.QFont()
+            font.setPointSize(16)
+            font.setBold(True)
+            font.setWeight(75)
+            user = db.getPlayer2(login)
+            self.username.setText(user[0])
+            self.username.setFont(font)
+            pixmap = QPixmap('images/avatars/anubis.png').scaled(61, 61)    # TODO do podmiany na 'images/avatars/'+user[1] tylko zmienic w bazie zeby sama nazwa pliku byla
+            self.avatar.setPixmap(pixmap)
+            self.user.username = user[0]          #ustawienie danych zalogowanego usera
+            self.user.avatar = user[1]
+            self.user.isAdmin = user[2]
+            #LoginDialog.close()            #TODO zamykanie, nie dziala :(
+            #LoginDialog.done(2)
+            #LoginDialog.accept()
         else:
             self.errorLabel1.setText("UNSUCCESFULL !")
 
@@ -245,16 +270,18 @@ class Ui_LoginDialog(object):
             # jesli istnieje zwrocic false
             db = blackjack.DataBase()
             mainResult = False
-            result = db.checkIfPlayerExists(self.loginInput.text())
+            result = db.checkIfPlayerExists(self.loginInput_2.text())
             if (result):
+                self.errorLabel2.setStyleSheet("color: red")
+                self.errorLabel2.setText("Username already taken")
                 pass
             else:
                 db.addPlayer(self.loginInput_2.text(), self.password1Input.text(), "/images/avatars/default.png")
                 blackjack.testPlayers()
                 mainResult = True
                 print("Pomyślnie dodano uzytkownika")
-            self.errorLabel2.setStyleSheet("color: #b1f900")
-            self.errorLabel2.setText("Succesfully created")
+                self.errorLabel2.setStyleSheet("color: #b1f900")
+                self.errorLabel2.setText("Succesfully created")
             return mainResult
 
 
