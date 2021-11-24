@@ -22,7 +22,6 @@ class Ui_LoginDialog(object):
         self.username = username
         self.avatar = avatar
 
-
     def setupUi(self, LoginDialog):
         LoginDialog.setObjectName("LoginDialog")
         LoginDialog.resize(481, 210)
@@ -219,24 +218,20 @@ class Ui_LoginDialog(object):
             user = db.getPlayer2(login)
             self.username.setText(user[0])
             self.username.setFont(font)
-            pixmap = QPixmap('images/avatars/anubis.png').scaled(61, 61)    # TODO do podmiany na 'images/avatars/'+user[1] tylko zmienic w bazie zeby sama nazwa pliku byla
+            pixmap = QPixmap('images/avatars/'+user[1]).scaled(61, 61)
+
             self.avatar.setPixmap(pixmap)
             self.user.username = user[0]          #ustawienie danych zalogowanego usera
             self.user.avatar = user[1]
             self.user.isAdmin = user[2]
+
+
+
             #LoginDialog.close()            #TODO zamykanie, nie dziala :(
             #LoginDialog.done(2)
             #LoginDialog.accept()
         else:
             self.errorLabel1.setText("UNSUCCESFULL !")
-
-
-
-        # tutaj zapytania do bazy dac z tymi danymi
-        # pierwsze czy istnieje, jesli tak to drugie zapytanie sprawdzic haslo
-        # lub od razu sprawdzic oba  NIE WIEM XD
-        # jesli sie zgadza to zalogowano(jeszcze jakos do menu glownego to przekazac)
-        # jesli nie to errorLabel1 dac na unsucesfull
 
 
     def newUserValidation(self):
@@ -266,8 +261,6 @@ class Ui_LoginDialog(object):
             self.errorLabel2.setText("")
             passMatch = True
         if loginCorrect and pass1Correct and pass2Correct and passMatch:
-            # tutaj dopiero sprawdzenie z baza jesli user nie istnieje to utworzyc i zwrocic true
-            # jesli istnieje zwrocic false
             db = blackjack.DataBase()
             mainResult = False
             result = db.checkIfPlayerExists(self.loginInput_2.text())
@@ -276,7 +269,7 @@ class Ui_LoginDialog(object):
                 self.errorLabel2.setText("Username already taken")
                 pass
             else:
-                db.addPlayer(self.loginInput_2.text(), self.password1Input.text(), "/images/avatars/default.png")
+                db.addPlayer(self.loginInput_2.text(), self.password1Input.text(), "default.png")
                 blackjack.testPlayers()
                 mainResult = True
                 print("Pomyślnie dodano uzytkownika")
@@ -292,6 +285,7 @@ if __name__ == "__main__":
     blackjack.testPlayers()
     app = QtWidgets.QApplication(sys.argv)
     LoginDialog = QtWidgets.QDialog()
+    LoginDialog.setWindowFlag(QtCore.Qt.WindowType.Popup)
     ui = Ui_LoginDialog()
     ui.setupUi(LoginDialog)
     LoginDialog.show()

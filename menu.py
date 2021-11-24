@@ -998,6 +998,33 @@ class Ui_MainWindow(object):
         # self.st_1.setText()      st_1 ... st_20 statystyki odpowiednio ponumerowane po kolei
         # oprocz tego mysle, ze bedzie jeszcze zapytanie o opis i avatar, gdzies bedzie jeszcze na to miejsce, ale jeszcze nie teraz
 
+        playerStat = db.getPlayerStatistics(username)
+
+        self.st_1.setText(str(playerStat["HandsPlayed"]))
+        self.st_2.setText(str(playerStat["WonHands"]))
+        self.st_3.setText(str(playerStat["WinRatio"]))
+        self.st_6.setText(str(playerStat["AverageTimeToMove"]))
+        self.st_7.setText(str(playerStat["MostPickedCard"]))
+        self.st_5.setText(str(playerStat["CardsGotten"]))
+
+        moneyStat = db.getPlayer(username)
+        self.st_4.setText(str(moneyStat["money"]))
+
+        cardStat = db.getCardStatistics(username)
+        self.st_8.setText(str(cardStat["2"]))
+        self.st_9.setText(str(cardStat["3"]))
+        self.st_10.setText(str(cardStat["4"]))
+        self.st_11.setText(str(cardStat["5"]))
+        self.st_12.setText(str(cardStat["6"]))
+        self.st_13.setText(str(cardStat["7"]))
+        self.st_14.setText(str(cardStat["8"]))
+        self.st_15.setText(str(cardStat["9"]))
+        self.st_16.setText(str(cardStat["10"]))
+        self.st_17.setText(str(cardStat["J"]))
+        self.st_18.setText(str(cardStat["Q"]))
+        self.st_19.setText(str(cardStat["K"]))
+        self.st_20.setText(str(cardStat["A"]))
+
         self.userStatLabel.setText('Statistics of ' + username)
         self.stackedWidget.setCurrentWidget(self.statisticsPage)
         print('stats of selected user')
@@ -1060,6 +1087,7 @@ class TableModel(QtCore.QAbstractTableModel):
 
 if __name__ == "__main__":
     import sys
+    db = blackjack.DataBase()
     print(blackjack.testPlayers())
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
