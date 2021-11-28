@@ -893,7 +893,7 @@ class Ui_MainWindow(object):
 
     def openLoginDialog(self, index, stWid, username, avatar):
         self.LoginDialog = QtWidgets.QDialog()
-        self.ui = Ui_LoginDialog(self.loggedUsers[index], stWid, username, avatar)
+        self.ui = Ui_LoginDialog(self.loggedUsers, index, stWid, username, avatar)
         self.ui.setupUi(self.LoginDialog)
         #print(type(index))
         #x = threading.Thread(target=self.closeLoginOnLogin, args=(index,))

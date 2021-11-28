@@ -16,8 +16,9 @@ from PyQt5.QtGui import QPixmap
 import blackjack
 
 class Ui_LoginDialog(object):
-    def __init__(self, user, stackedWidget, username, avatar):
-        self.user = user
+    def __init__(self, users, index, stackedWidget, username, avatar):
+        self.users = users
+        self.index = index
         self.stWid = stackedWidget
         self.username = username
         self.avatar = avatar
@@ -201,8 +202,12 @@ class Ui_LoginDialog(object):
             print("Login/password incorrect")
         else:
             self.errorLabel1.setText("")
-            print("good to go")
-            self.loginUser(self.loginInput.text(), self.passwordInput.text())
+            print("good to go(regex)")
+            if self.checkIfUserLogged(self.loginInput.text()):
+                print("good to go")
+                self.loginUser(self.loginInput.text(), self.passwordInput.text())
+            else:
+                print("user already logged")
 
     def loginUser(self, login, password):
         db = blackjack.DataBase()
@@ -221,11 +226,9 @@ class Ui_LoginDialog(object):
             pixmap = QPixmap('images/avatars/'+user[1]).scaled(61, 61)
 
             self.avatar.setPixmap(pixmap)
-            self.user.username = user[0]          #ustawienie danych zalogowanego usera
-            self.user.avatar = user[1]
-            self.user.isAdmin = user[2]
-
-
+            self.users[self.index].username = user[0]          #ustawienie danych zalogowanego usera
+            self.users[self.index].avatar = user[1]
+            self.users[self.index].isAdmin = user[2]
 
             #LoginDialog.close()            #TODO zamykanie, nie dziala :(
             #LoginDialog.done(2)
@@ -276,6 +279,12 @@ class Ui_LoginDialog(object):
                 self.errorLabel2.setStyleSheet("color: #b1f900")
                 self.errorLabel2.setText("Succesfully created")
             return mainResult
+
+    def checkIfUserLogged(self, username):
+        for i in range(5):
+            if self.users[i].username == username:
+                return False
+        return True
 
 
 if __name__ == "__main__":
