@@ -209,13 +209,35 @@ class DataBase:
             rankStat = cur.fetchall()
             return rankStat
 
-        def updateAccount(self,oldUsername,newUsername,newPassword,avatar,description):
+        def updateAvatar(self,username,avatar):
             con = sqlite3.connect('database.db')
             cur = con.cursor()
-            cur.execute('SELECT playerID FROM players where username =?', (oldUsername,))
+            cur.execute('SELECT playerID FROM players where username =?', (username,))
             playerID = cur.fetchone()[0]
-            cur.execute('UPDATE players SET username=?,password=?,avatar=?,description=? where playerID =?', (newUsername,crypter.encrypt_message(newPassword),avatar,description,playerID,))
+            cur.execute('UPDATE players SET avatar=? WHERE playerID = ?', (avatar,playerID) )
             con.commit()
+
+        def updateDescription(self,username,description):
+            con = sqlite3.connect('database.db')
+            cur = con.cursor()
+            cur.execute('SELECT playerID FROM players where username =?', (username,))
+            playerID = cur.fetchone()[0]
+            cur.execute('UPDATE players SET description=? WHERE playerID = ?', (description,playerID))
+            con.commit()
+
+        def updatePassword(self,username,password):
+            con = sqlite3.connect('database.db')
+            cur = con.cursor()
+            cur.execute('SELECT playerID FROM players where username =?', (username,))
+            playerID = cur.fetchone()[0]
+            cur.execute('UPDATE players SET password=? WHERE playerID = ?', (crypter.encrypt_message(password),playerID))
+            con.commit()
+
+        def getPasswd(self, username):
+            con = sqlite3.connect('database.db')
+            cur = con.cursor()
+            cur.execute('SELECT password FROM players WHERE username=?', (username,))
+            return crypter.decrypt_message(cur)
 
 def testPlayers():
     con = sqlite3.connect('database.db')
