@@ -14,7 +14,10 @@ from PyQt5.QtGui import QPixmap
 
 import blackjack
 from login import Ui_LoginDialog
+from manage2 import Ui_Dialog
 import threading
+import math
+
 
 class Ui_MainWindow(object):
     def __init__(self):
@@ -280,6 +283,8 @@ class Ui_MainWindow(object):
         self.adminPanelButton.setGeometry(QtCore.QRect(1160, 0, 75, 23))
         self.adminPanelButton.setObjectName("adminPanelButton")
         self.stackedWidget.addWidget(self.mainMenuPage)
+
+        # SETUP PAGE
         self.setupPage = QtWidgets.QWidget()
         self.setupPage.setObjectName("setupPage")
         self.verticalLayoutWidget_3 = QtWidgets.QWidget(self.setupPage)
@@ -288,23 +293,23 @@ class Ui_MainWindow(object):
         self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.verticalLayoutWidget_3)
         self.verticalLayout_4.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
-        self.comboBox_1 = QtWidgets.QComboBox(self.verticalLayoutWidget_3)
+        self.comboBox_1 = ComboBoxUsers(self.verticalLayoutWidget_3)
         self.comboBox_1.setMinimumSize(QtCore.QSize(0, 44))
         self.comboBox_1.setObjectName("comboBox_1")
         self.verticalLayout_4.addWidget(self.comboBox_1)
-        self.comboBox_2 = QtWidgets.QComboBox(self.verticalLayoutWidget_3)
+        self.comboBox_2 = ComboBoxUsers(self.verticalLayoutWidget_3)
         self.comboBox_2.setMinimumSize(QtCore.QSize(0, 44))
         self.comboBox_2.setObjectName("comboBox_2")
         self.verticalLayout_4.addWidget(self.comboBox_2)
-        self.comboBox_3 = QtWidgets.QComboBox(self.verticalLayoutWidget_3)
+        self.comboBox_3 = ComboBoxUsers(self.verticalLayoutWidget_3)
         self.comboBox_3.setMinimumSize(QtCore.QSize(0, 44))
         self.comboBox_3.setObjectName("comboBox_3")
         self.verticalLayout_4.addWidget(self.comboBox_3)
-        self.comboBox_4 = QtWidgets.QComboBox(self.verticalLayoutWidget_3)
+        self.comboBox_4 = ComboBoxUsers(self.verticalLayoutWidget_3)
         self.comboBox_4.setMinimumSize(QtCore.QSize(0, 44))
         self.comboBox_4.setObjectName("comboBox_4")
         self.verticalLayout_4.addWidget(self.comboBox_4)
-        self.comboBox_5 = QtWidgets.QComboBox(self.verticalLayoutWidget_3)
+        self.comboBox_5 = ComboBoxUsers(self.verticalLayoutWidget_3)
         self.comboBox_5.setMinimumSize(QtCore.QSize(0, 44))
         self.comboBox_5.setObjectName("comboBox_5")
         self.verticalLayout_4.addWidget(self.comboBox_5)
@@ -386,6 +391,8 @@ class Ui_MainWindow(object):
         self.horizontalLayout_4.addWidget(self.timeSecondsLabel)
         self.verticalLayout_6.addLayout(self.horizontalLayout_4)
         self.stackedWidget.addWidget(self.setupPage)
+
+        # PLAY PAGE
         self.playPage = QtWidgets.QWidget()
         self.playPage.setObjectName("playPage")
         self.verticalLayoutWidget_7 = QtWidgets.QWidget(self.playPage)
@@ -524,10 +531,14 @@ class Ui_MainWindow(object):
         self.exitButton.setGeometry(QtCore.QRect(10, 680, 51, 21))
         self.exitButton.setObjectName("exitButton")
         self.tableImageLabel = QtWidgets.QLabel(self.playPage)
-        self.tableImageLabel.setGeometry(QtCore.QRect(0, 0, 861, 661))
+        self.tableImageLabel.setGeometry(QtCore.QRect(0, 0, 862, 662))
+        self.pixmapTable = QPixmap('images/others/table.jpg').scaled(862, 662)
+        self.tableImageLabel.setPixmap(self.pixmapTable)
         self.tableImageLabel.setText("")
         self.tableImageLabel.setObjectName("tableImageLabel")
         self.stackedWidget.addWidget(self.playPage)
+
+        # RANKING PAGE
         self.rankingPage = QtWidgets.QWidget()
         self.rankingPage.setObjectName("rankingPage")
         self.rankingList = QtWidgets.QTableView(self.rankingPage)
@@ -548,6 +559,8 @@ class Ui_MainWindow(object):
         self.statButton.setGeometry(QtCore.QRect(500, 680, 241, 23))
         self.statButton.setObjectName("statButton")
         self.stackedWidget.addWidget(self.rankingPage)
+
+        # ADMIN PAGE
         self.adminPage = QtWidgets.QWidget()
         self.adminPage.setObjectName("adminPage")
         self.backToMenuButton_3 = QtWidgets.QPushButton(self.adminPage)
@@ -577,6 +590,8 @@ class Ui_MainWindow(object):
         self.label_6.setFont(font)
         self.label_6.setObjectName("label_6")
         self.stackedWidget.addWidget(self.adminPage)
+
+        # STATISTICS PAGE
         self.statisticsPage = QtWidgets.QWidget()
         self.statisticsPage.setObjectName("statisticsPage")
         self.gridLayoutWidget_6 = QtWidgets.QWidget(self.statisticsPage)
@@ -705,6 +720,13 @@ class Ui_MainWindow(object):
         self.st_6 = QtWidgets.QLabel(self.gridLayoutWidget_6)
         self.st_6.setObjectName("st_6")
         self.gridLayout_6.addWidget(self.st_6, 5, 1, 1, 1)
+        self.statAvatar = QtWidgets.QLabel(self.statisticsPage)
+        self.statAvatar.setGeometry(QtCore.QRect(1039, 50, 100, 100))
+        self.statAbout = QtWidgets.QLabel(self.statisticsPage)
+        self.statAbout.setGeometry(QtCore.QRect(939, 200, 300, 400))
+        self.statAbout.setStyleSheet("QLabel { font-size: 13px;color: #FEFE58; font-weight: bold;border: 2px solid gray;border-radius: 10px;}")
+        self.statAbout.setAlignment(Qt.AlignCenter)
+        self.statAbout.setWordWrap(True)
         self.userStatLabel = QtWidgets.QLabel(self.statisticsPage)
         self.userStatLabel.setGeometry(QtCore.QRect(280, 30, 391, 41))
         self.userStatLabel.setFont(font)
@@ -716,6 +738,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout.addWidget(self.stackedWidget)
         MainWindow.setCentralWidget(self.centralwidget)
 
+        # START SETTINGS
         self.retranslateUi(MainWindow)
         self.stackedWidget.setCurrentIndex(0)
         self.userSW_1.setCurrentIndex(0)
@@ -734,11 +757,18 @@ class Ui_MainWindow(object):
         self.deckSkinGroup.addButton(self.skin1rb)
         self.deckSkinGroup.addButton(self.skin2rb)
 
+        # BUTTONS FUNCTIONS
         self.loginButton_1.clicked.connect(lambda: self.openLoginDialog(0, self.userSW_1, self.username_1, self.avatarKn_1))
         self.loginButton_2.clicked.connect(lambda: self.openLoginDialog(1, self.userSW_2, self.username_2, self.avatarKn_2))
         self.loginButton_3.clicked.connect(lambda: self.openLoginDialog(2, self.userSW_3, self.username_3, self.avatarKn_3))
         self.loginButton_4.clicked.connect(lambda: self.openLoginDialog(3, self.userSW_4, self.username_4, self.avatarKn_4))
         self.loginButton_5.clicked.connect(lambda: self.openLoginDialog(4, self.userSW_5, self.username_5, self.avatarKn_5))
+
+        self.manageButton_1.clicked.connect(lambda: self.openManageDialog(self.loggedUsers[0], self.avatarKn_1))
+        self.manageButton_2.clicked.connect(lambda: self.openManageDialog(self.loggedUsers[1], self.avatarKn_2))
+        self.manageButton_3.clicked.connect(lambda: self.openManageDialog(self.loggedUsers[2], self.avatarKn_3))
+        self.manageButton_4.clicked.connect(lambda: self.openManageDialog(self.loggedUsers[3], self.avatarKn_4))
+        self.manageButton_5.clicked.connect(lambda: self.openManageDialog(self.loggedUsers[4], self.avatarKn_5))
 
         self.logoutButton_1.clicked.connect(lambda: self.logout(0, self.userSW_1))
         self.logoutButton_2.clicked.connect(lambda: self.logout(1, self.userSW_2))
@@ -895,11 +925,7 @@ class Ui_MainWindow(object):
         self.LoginDialog = QtWidgets.QDialog()
         self.ui = Ui_LoginDialog(self.loggedUsers, index, stWid, username, avatar)
         self.ui.setupUi(self.LoginDialog)
-        #print(type(index))
-        #x = threading.Thread(target=self.closeLoginOnLogin, args=(index,))
-        #x.start()
         self.LoginDialog.exec()
-
 
     def logout(self, index, stWid):
         stWid.setCurrentIndex(0)
@@ -907,12 +933,11 @@ class Ui_MainWindow(object):
         self.loggedUsers[index].avatar = None
         self.loggedUsers[index].isAdmin = None
 
-    def closeLoginOnLogin(self, index):
-        while True:
-            if self.loggedUsers[index].username is not None:
-                self.LoginDialog.close()
-                break
-            #threading.currentThread().stop()
+    def openManageDialog(self, user, avatar):
+        self.ManageDialog = QtWidgets.QDialog()
+        self.ui = Ui_Dialog(user, avatar)
+        self.ui.setupUi(self.ManageDialog)
+        self.ManageDialog.exec()
 
     def adminButtonFunction(self):
         self.loadAdminList(0)
@@ -963,6 +988,23 @@ class Ui_MainWindow(object):
         print('setup game')
 
     def startGameButtonFunction(self):
+        hand1 = UserHand(math.pi*2/5, 0, self.playPage)
+        hand1.addCard('2karo')
+        hand1.addCard('2karo')
+        hand2 = UserHand(math.pi*2/5, 1, self.playPage)
+        hand2.addCard('3karo')
+        hand3 = UserHand(math.pi*2/5, 2, self.playPage)
+        hand3.addCard('4karo')
+        hand3.addCard('2karo')
+        hand3.addCard('2karo')
+        hand4 = UserHand(math.pi*2/5, 3, self.playPage)
+        hand4.addCard('5karo')
+        hand5 = UserHand(math.pi*2/5, 4, self.playPage)
+        hand5.addCard('6karo')
+        hand5.addCard('2karo')
+        hand5.addCard('2karo')
+        hand5.addCard('2karo')
+        hand5.addCard('2karo')
         self.stackedWidget.setCurrentWidget(self.playPage)
         print('start game')
 
@@ -1007,8 +1049,8 @@ class Ui_MainWindow(object):
         self.st_7.setText(str(playerStat["MostPickedCard"]))
         self.st_5.setText(str(playerStat["CardsGotten"]))
 
-        moneyStat = db.getPlayer(username)
-        self.st_4.setText(str(moneyStat["money"]))
+        player = db.getPlayer(username)
+        self.st_4.setText(str(player["money"]))
 
         cardStat = db.getCardStatistics(username)
         self.st_8.setText(str(cardStat["2"]))
@@ -1025,6 +1067,11 @@ class Ui_MainWindow(object):
         self.st_19.setText(str(cardStat["K"]))
         self.st_20.setText(str(cardStat["A"]))
 
+
+        pixmap = QPixmap('images/avatars/' + str(player["avatar"])).scaled(100, 100)
+        self.statAvatar.setPixmap(pixmap)
+        self.statAbout.setText(str(player["description"]))
+        self.statAbout.setWordWrap(True)
         self.userStatLabel.setText('Statistics of ' + username)
         self.stackedWidget.setCurrentWidget(self.statisticsPage)
         print('stats of selected user')
@@ -1084,6 +1131,61 @@ class TableModel(QtCore.QAbstractTableModel):
             except:
                 pass
         return super().headerData(section, orientation, role)
+
+
+class UserHand(QtWidgets.QWidget):
+    def __init__(self, angle, index, parent=None):
+        super(UserHand, self).__init__(parent)
+        self.setStyleSheet("background: ")            #zeby przeswitywalo
+        r = 250                                                 #ustawianie miejsca
+        x = math.floor(-r * math.cos(math.pi/2 + angle * index) + 431)
+        y = math.floor(-r * math.sin(math.pi/2 + angle * index) + 331)
+        print('x ', x, ', y ', y)
+        self.setGeometry(QtCore.QRect(x - 150, y - 80, 300, 160))        # x,y  862 662 tyle ma obraz stolu
+        self.vBox = QtWidgets.QVBoxLayout(self)
+        self.vBox.setAlignment(Qt.AlignCenter)
+        self.hBox = QtWidgets.QHBoxLayout()
+        self.hBox.setAlignment(Qt.AlignCenter)
+        self.hBox2 = QtWidgets.QHBoxLayout()
+        self.hBox2.setAlignment(Qt.AlignCenter)
+        self.vBox.addLayout(self.hBox)
+        self.vBox.addLayout(self.hBox2)
+        self.avatar = QtWidgets.QLabel()
+        self.avatar.setAlignment(Qt.AlignCenter)
+        self.hBox2.addWidget(self.avatar)
+        self.pixmapAvatar = QPixmap('images/avatars/default.png').scaled(41,41)
+        self.vBox2 = QtWidgets.QVBoxLayout()
+        self.hBox2.addLayout(self.vBox2)
+        self.avatar.setPixmap(self.pixmapAvatar)
+        self.username = QtWidgets.QLabel()
+        self.username.setText("USERNAME")
+        self.points = QtWidgets.QLabel()
+        self.points.setText("Points")
+        self.vBox2.addWidget(self.username)
+        self.vBox2.addWidget(self.points)
+
+    def addCard(self, cardname):                    #tutaj jakas animacje pewnie
+        self.card = QtWidgets.QLabel()
+        self.hBox.addWidget(self.card)
+        self.pixmapCard = QPixmap('images/cards/set2/'+cardname+'.png').scaled(80, 100)
+        self.card.setPixmap(self.pixmapCard)
+
+    def removeCards(self):                          #tak to chyba usuwa
+        while self.hBox.count():
+            child = self.hBox.takeAt(0)
+            if child.widget():
+                child.widget().deleteLater()
+
+    def setPoints(self, points):
+        self.points.setText(str(points))
+
+
+class ComboBoxUsers(QtWidgets.QComboBox):
+    def __init__(self, parent=None):
+        super(ComboBoxUsers, self).__init__(parent)
+        self.setStyleSheet("QLabel { font-size: 13px;color: #FEFE58; font-weight: bold;}")
+        self.addItems(['None', 'AI(easy)', 'AI(medium)', 'AI(hard)'])
+
 
 if __name__ == "__main__":
     import sys

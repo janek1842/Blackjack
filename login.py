@@ -10,10 +10,9 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 import re
-
 from PyQt5.QtGui import QPixmap
-
 import blackjack
+
 
 class Ui_LoginDialog(object):
     def __init__(self, users, index, stackedWidget, username, avatar):
@@ -230,6 +229,7 @@ class Ui_LoginDialog(object):
             self.users[self.index].avatar = user[1]
             self.users[self.index].isAdmin = user[2]
 
+            #LoginDialog.closeEvent(self)
             #LoginDialog.close()            #TODO zamykanie, nie dziala :(
             #LoginDialog.done(2)
             #LoginDialog.accept()
