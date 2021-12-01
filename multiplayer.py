@@ -1,4 +1,7 @@
+import np as np
+
 from utils import *
+import numpy
 
 twentyone = 21
 lowest_bet = 5

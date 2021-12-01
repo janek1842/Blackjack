@@ -270,6 +270,21 @@ class DataBase:
             con.commit()
             con.close()
 
+        def checkIfAdminPresent(self,username1=None,username2=None,username3=None,username4=None,username5=None):
+            listOfUsers = [username1,username2,username3,username4,username5]
+
+            for u in listOfUsers:
+                if u is not None:
+                    con = sqlite3.connect('database.db')
+                    cur = con.cursor()
+                    cur.execute('SELECT isAdmin FROM players where username =?', (u,))
+                    try:
+                        if(cur.fetchone()[0]=="True"):
+                            return True
+                    except:
+                        print("Sth wrong in checkIfAdminPresent")
+            return False
+
 def testPlayers():
     con = sqlite3.connect('database.db')
     cur = con.cursor()
