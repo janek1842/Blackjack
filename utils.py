@@ -60,18 +60,21 @@ class Player:
         self.cards = [pick_a_card(card_box, True), pick_a_card(card_box, True)]
         self.points = calc_points(self.cards)
         
-    def set_bet(self, lowest_bet):
-        self.bet = int(input('fund : %d,   enter the initial bet : '%self.money))
-        while True:
-            if self.bet < lowest_bet:
-                self.bet = int(input('invalid !!   lowest required bed is : %d, enter the bet again : '%lowest_bet))
-                continue
-            if self.bet > self.money:
-                self.bet = int(input('invalid !!   fund : %d, enter the bet again : '%self.money))
-            else:
-                self.money -= self.bet
-                break
-
+    def set_bet(self, lowest_bet, type_of_player):
+        if type_of_player =="p":
+            self.bet = int(input('fund : %d,   enter the initial bet : '%self.money))
+            while True:
+                if self.bet < lowest_bet:
+                    self.bet = int(input('invalid !!   lowest required bed is : %d, enter the bet again : '%lowest_bet))
+                    continue
+                if self.bet > self.money:
+                    self.bet = int(input('invalid !!   fund : %d, enter the bet again : '%self.money))
+                else:
+                    self.money -= self.bet
+                    break
+        else:
+            self.bet = self.money
+            self.money -= self.bet
     
     def show_state(self):
         print('your cards : ', self.cards, '\t\t total points : ', self.points)
@@ -81,6 +84,14 @@ class Player:
             self.bj_state = True
             print('!!!!!!!! BLACKJACK !!!!!!!!!!')
         return self.bj_state
+
+    def check_A(self):
+        numbers = 0
+        for i in range(len(self.cards)):
+            if self.cards[i].split('_')[-1] == 'A':
+                numbers+=1
+        return numbers
+
     
     def hit(self, card_box):
         self.cards += [pick_a_card(card_box, True)]
