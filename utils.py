@@ -2,7 +2,7 @@ import time
 import numpy as np
 
 
-def wait(t = 2):
+def wait(t):
     time.sleep(t)
 
 def pick_a_card(cards, remove = True, manual = False):

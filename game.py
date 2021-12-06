@@ -1,12 +1,14 @@
 from numpy import random
-
 from utils import *
 
 twentyone = 21
 lowest_bet = 5
+t = 1
 yes = ['y', 'yes']
 no = ['n', 'no']
-numer_of_decks = 4
+numer_of_decks = 3
+
+t0 = time.time()
 
 while True:
     try:
@@ -50,7 +52,7 @@ for i in range(number_of_players):
         print(' ****************** PLAYER %d - %s ****************' % (i+1, players[i].name))
         # setting initial bet0
         players[i].set_bet(lowest_bet, type[i])
-        wait()
+        wait(t)
 
 for i in range(number_of_players):
     if type[i] == "p":
@@ -62,7 +64,7 @@ for i in range(number_of_players):
         # print(card_box)
         players[i].show_state()
         bjs[i] = players[i].check_blackjack(twentyone)
-        wait(.5)
+        wait(t)
 
         print(' ****************** PLAYER - %s ****************' % players[i].name)
         players[i].show_state()
@@ -72,7 +74,7 @@ for i in range(number_of_players):
             while True:
                 # stop betting ?
                 hit_stand = input('do you want to hit ? (y / n)')
-                wait(.5)
+                wait(t)
                 if hit_stand.lower() in yes:
                     print('player is picking a new card...')
                     card_box, card_cnt, shuffle_point = card_inc(card_box, 1, card_cnt, shuffle_point, numer_of_decks)
@@ -94,7 +96,7 @@ for i in range(number_of_players):
         players[i].new_session(card_box)
         players[i].show_state()
         bjs[i] = players[i].check_blackjack(twentyone)
-        wait()
+        wait(t)
 
         print(' ****************** PLAYER - %s ****************' % players[i].name)
         players[i].show_state()
@@ -129,7 +131,7 @@ for i in range(number_of_players):
         # print(card_box)
         players[i].show_state()
         bjs[i] = players[i].check_blackjack(twentyone)
-        wait()
+        wait(t)
 
         print(' ****************** PLAYER - %s ****************' % players[i].name)
         players[i].show_state()
@@ -164,7 +166,7 @@ for i in range(number_of_players):
         # print(card_box)
         players[i].show_state()
         bjs[i] = players[i].check_blackjack(twentyone)
-        wait()
+        wait(t)
 
         print(' ****************** PLAYER - %s ****************' % players[i].name)
         players[i].show_state()
@@ -220,21 +222,25 @@ for l in range(number_of_players):
     print(left_over[l])
     if left_over[l] > 21:
         left_over[l] = 0
-#id = left_over.argmax()
+print(left_over)
 for k in range(number_of_players):
-    if max(left_over) == left_over[k]:
-            win_state[k] = 'w'
+    if (max(left_over) == left_over[k]) and left_over[k]>0:
+        win_state[k] = 'w'
+    else:
+        win_state[k] = 'l'
 
+print(win_state)
 for i in range(number_of_players):
         players[i].update_money(win_state[i])
         if win_state[i] == 'w':
             wstate, gstate = 'wins', 'gains'
-        elif win_state[i] == 'd':
-            wstate, gstate = 'draws', 'gets back'
         else:
             wstate, gstate = 'loses', 'loses'
         print('"%s" %s, %s bet of %d, current fund: %d' % (
         players[i].name, wstate, gstate, players[i].bet if not bjs[i] else 1.5 * players[i].bet, players[i].money))
+        players[i].show_state()
 
+total_time = time.time() - t0
+print ('Game time: ' + str(total_time))
 print('###################################################################################')
 print('################################## GAME OVER ######################################')
