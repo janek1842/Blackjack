@@ -293,26 +293,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_4 = QtWidgets.QVBoxLayout(self.verticalLayoutWidget_3)
         self.verticalLayout_4.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
-        self.comboBox_1 = ComboBoxUsers(self.verticalLayoutWidget_3)
-        self.comboBox_1.setMinimumSize(QtCore.QSize(0, 44))
-        self.comboBox_1.setObjectName("comboBox_1")
-        self.verticalLayout_4.addWidget(self.comboBox_1)
-        self.comboBox_2 = ComboBoxUsers(self.verticalLayoutWidget_3)
-        self.comboBox_2.setMinimumSize(QtCore.QSize(0, 44))
-        self.comboBox_2.setObjectName("comboBox_2")
-        self.verticalLayout_4.addWidget(self.comboBox_2)
-        self.comboBox_3 = ComboBoxUsers(self.verticalLayoutWidget_3)
-        self.comboBox_3.setMinimumSize(QtCore.QSize(0, 44))
-        self.comboBox_3.setObjectName("comboBox_3")
-        self.verticalLayout_4.addWidget(self.comboBox_3)
-        self.comboBox_4 = ComboBoxUsers(self.verticalLayoutWidget_3)
-        self.comboBox_4.setMinimumSize(QtCore.QSize(0, 44))
-        self.comboBox_4.setObjectName("comboBox_4")
-        self.verticalLayout_4.addWidget(self.comboBox_4)
-        self.comboBox_5 = ComboBoxUsers(self.verticalLayoutWidget_3)
-        self.comboBox_5.setMinimumSize(QtCore.QSize(0, 44))
-        self.comboBox_5.setObjectName("comboBox_5")
-        self.verticalLayout_4.addWidget(self.comboBox_5)
+        self.comboBox = ComboBoxUsers(self.loggedUsers, self.setupPage)
         self.startGameButton = QtWidgets.QPushButton(self.setupPage)
         self.startGameButton.setGeometry(QtCore.QRect(890, 570, 351, 121))
         self.startGameButton.setObjectName("startGameButton")
@@ -988,27 +969,13 @@ class Ui_MainWindow(object):
         print('setup game')
 
     def startGameButtonFunction(self):
-        hand1 = UserHand(math.pi*2/5, 0, self.playPage)
-        hand1.addCard('2karo')
-        hand1.addCard('2karo')
-        hand2 = UserHand(math.pi*2/5, 1, self.playPage)
-        hand2.addCard('3karo')
-        hand3 = UserHand(math.pi*2/5, 2, self.playPage)
-        hand3.addCard('4karo')
-        hand3.addCard('2karo')
-        hand3.addCard('2karo')
-        hand4 = UserHand(math.pi*2/5, 3, self.playPage)
-        hand4.addCard('5karo')
-        hand5 = UserHand(math.pi*2/5, 4, self.playPage)
-        hand5.addCard('6karo')
-        hand5.addCard('2karo')
-        hand5.addCard('2karo')
-        hand5.addCard('2karo')
-        hand5.addCard('2karo')
+        print('players: ', self.comboBox.getUsers())
+        self.hands = UserHands(self.comboBox.getUsers(), self.playPage)
         self.stackedWidget.setCurrentWidget(self.playPage)
         print('start game')
 
     def exitButtonFunction(self):
+        self.hands.setParent(None)
         self.stackedWidget.setCurrentWidget(self.setupPage)
         print('exit game')
 
@@ -1133,15 +1100,25 @@ class TableModel(QtCore.QAbstractTableModel):
         return super().headerData(section, orientation, role)
 
 
+class UserHands(QtWidgets.QWidget):
+    def __init__(self, players, parent=None):
+        super(UserHands, self).__init__(parent)
+        hands = []
+        for i in range(len(players)):
+            hand = UserHand(math.pi * 2 / len(players), i, players[i], self)
+            hand.addCard('2karo')
+            hands.append(hand)
+
+
 class UserHand(QtWidgets.QWidget):
-    def __init__(self, angle, index, parent=None):
+    def __init__(self, angle, index, user, parent=None):
         super(UserHand, self).__init__(parent)
-        self.setStyleSheet("background: ")            #zeby przeswitywalo
-        r = 250                                                 #ustawianie miejsca
+        self.setStyleSheet("background: ")                                      #zeby przeswitywalo
+        r = 250                                                                 #ustawianie miejsca
         x = math.floor(-r * math.cos(math.pi/2 + angle * index) + 431)
         y = math.floor(-r * math.sin(math.pi/2 + angle * index) + 331)
         print('x ', x, ', y ', y)
-        self.setGeometry(QtCore.QRect(x - 150, y - 80, 300, 160))        # x,y  862 662 tyle ma obraz stolu
+        self.setGeometry(QtCore.QRect(x - 150, y - 80, 300, 160))               # x,y  862 662 tyle ma obraz stolu
         self.vBox = QtWidgets.QVBoxLayout(self)
         self.vBox.setAlignment(Qt.AlignCenter)
         self.hBox = QtWidgets.QHBoxLayout()
@@ -1158,7 +1135,7 @@ class UserHand(QtWidgets.QWidget):
         self.hBox2.addLayout(self.vBox2)
         self.avatar.setPixmap(self.pixmapAvatar)
         self.username = QtWidgets.QLabel()
-        self.username.setText("USERNAME")
+        self.username.setText(user)
         self.points = QtWidgets.QLabel()
         self.points.setText("Points")
         self.vBox2.addWidget(self.username)
@@ -1180,11 +1157,99 @@ class UserHand(QtWidgets.QWidget):
         self.points.setText(str(points))
 
 
-class ComboBoxUsers(QtWidgets.QComboBox):
-    def __init__(self, parent=None):
+class ComboBoxUsers(QtWidgets.QWidget):
+    def __init__(self, loggedUsers, parent=None):
         super(ComboBoxUsers, self).__init__(parent)
-        self.setStyleSheet("QLabel { font-size: 13px;color: #FEFE58; font-weight: bold;}")
-        self.addItems(['None', 'AI(easy)', 'AI(medium)', 'AI(hard)'])
+        self.loggedUsers = loggedUsers
+        self.setGeometry(QtCore.QRect(10, 10, 751, 511))
+        self.vBox = QtWidgets.QVBoxLayout(self)
+
+        self.comboBox_1 = ComboBox(loggedUsers)
+        self.comboBox_1.setMinimumSize(QtCore.QSize(0, 44))
+        self.comboBox_2 = ComboBox(loggedUsers)
+        self.comboBox_2.setMinimumSize(QtCore.QSize(0, 44))
+        self.comboBox_3 = ComboBox(loggedUsers)
+        self.comboBox_3.setMinimumSize(QtCore.QSize(0, 44))
+        self.comboBox_4 = ComboBox(loggedUsers)
+        self.comboBox_4.setMinimumSize(QtCore.QSize(0, 44))
+        self.comboBox_5 = ComboBox(loggedUsers)
+        self.comboBox_5.setMinimumSize(QtCore.QSize(0, 44))
+
+        self.vBox.addWidget(self.comboBox_1)
+        self.vBox.addWidget(self.comboBox_2)
+        self.vBox.addWidget(self.comboBox_3)
+        self.vBox.addWidget(self.comboBox_4)
+        self.vBox.addWidget(self.comboBox_5)
+
+    def getUsers(self):
+        lista2 = []
+        for i in range(5):
+            cb = self.vBox.itemAt(i).widget()
+            if cb.currentText() is not None and cb.currentText() != 'None':
+                lista2.append(cb.currentText())
+        return lista2
+
+
+class ComboBox(QtWidgets.QComboBox):
+    popupAboutToBeShown = QtCore.pyqtSignal()
+    dataLeft = []
+    dataInUse = []
+
+    def __init__(self, loggedUsers, parent=None):
+        super(ComboBox, self).__init__(parent)
+        self.loggedUsers = loggedUsers
+        self.activated.connect(self.updateMe)
+        self.tempTxt = None
+        self.addItems(['None'])
+        self.setStyleSheet("QComboBox { font-size: 13px;color: #FEFE58; font-weight: bold;}")
+
+    def showPopup(self):
+        logg = []
+        # nowa aktualna lista zalogowanych
+        for el in self.loggedUsers:
+            if el.username is not None:
+                logg.append(el.username)
+
+        # wyczysc left i inuse jesli juz nie zalogowani
+        print(logg)
+        for el in self.dataLeft:
+            if el not in logg:
+                self.dataLeft.remove(el)
+        for el in self.dataInUse:
+            if el not in logg:
+                self.dataInUse.remove(el)
+
+        # jesli nie nowy wpis w uzyciu to dodaj do mozliwych
+        for el in logg:
+            if el not in self.dataInUse and el not in self.dataLeft:
+                self.dataLeft.append(el)
+
+        print('InUse ', self.dataInUse)
+        print('Left ', self.dataLeft)
+        self.clear()
+
+        lista = ['None'] + self.dataLeft + ['AI(easy)', 'AI(medium)', 'AI(hard)']
+        if self.tempTxt in lista:
+            lista.remove(self.tempTxt)
+        if self.tempTxt is not None:
+            lista.insert(0, self.tempTxt)
+        self.addItems(lista)
+        self.setCurrentText(self.tempTxt)
+        print('curr ', self.currentText())
+        super(ComboBox, self).showPopup()
+
+    def updateMe(self):
+        print('poprz ', self.tempTxt)
+        print('wybralem ', self.currentText())
+        if self.tempTxt in self.dataInUse:
+            self.dataInUse.remove(self.tempTxt)
+            self.dataLeft.append(self.tempTxt)
+        if self.currentText() in self.dataLeft:
+            self.dataLeft.remove(self.currentText())
+            self.dataInUse.append(self.currentText())
+        self.tempTxt = self.currentText()
+        print('InUse 2 ', self.dataInUse)
+        print('Left 2 ', self.dataLeft)
 
 
 if __name__ == "__main__":
