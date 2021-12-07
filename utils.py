@@ -78,7 +78,10 @@ class Player:
     
     def show_state(self):
         print('your cards : ', self.cards, '\t\t total points : ', self.points)
-    
+
+    def get_stats(self):
+        return self.cards
+
     def check_blackjack(self, base_point):
         if self.points == base_point:
             self.bj_state = True

@@ -1,4 +1,6 @@
 from numpy import random
+
+import blackjack
 from utils import *
 
 twentyone = 21
@@ -16,7 +18,7 @@ while True:
         break
     except ValueError:
         print("Oops!  That was no valid number.  Try again...")
-
+db = blackjack.DataBase
 type =[]
 players = []
 while len(type) != init_players:
@@ -34,6 +36,38 @@ while len(type) != init_players:
         type.pop()
 type = np.asarray(type)
 players = np.asarray(players)
+
+def getPlayerResult(i):
+    if(win_state[i]=='w'):
+        return True
+    elif(win_state[i]=='d'):
+        return None
+    else:
+        return False
+
+def getAmount(i,amount):
+    if getPlayerResult(i):
+        return amount
+    elif not getPlayerResult(i):
+        return (-1*amount)
+    else:
+        return 0
+
+def getCardDictFromList(cardOriginList):
+    cardList = []
+
+    for card in cardOriginList:
+        if('10' in card):
+            cardList.append("10")
+        else:
+            cardList.append(card[-1:])
+
+    cardDict = {}
+
+    for card in cardList:
+        cardDict[card] = cardList.count(card)
+
+    return cardDict
 
 card_box = {
     'heart': (['A', 'J', 'Q', 'K'] + ['%d' % i for i in range(2, 11)]) * numer_of_decks,
@@ -220,8 +254,12 @@ left_over = np.array(left_over)
 print(left_over)
 for l in range(number_of_players):
     print(left_over[l])
-    if left_over[l] > 21:
-        left_over[l] = 0
+    # Adrian sprawdz to
+    try:
+        if left_over[l] > 21:
+            left_over[l] = 0
+    except Exception:
+        pass
 print(left_over)
 for k in range(number_of_players):
     if (max(left_over) == left_over[k]) and left_over[k]>0:
@@ -238,7 +276,13 @@ for i in range(number_of_players):
             wstate, gstate = 'loses', 'loses'
         print('"%s" %s, %s bet of %d, current fund: %d' % (
         players[i].name, wstate, gstate, players[i].bet if not bjs[i] else 1.5 * players[i].bet, players[i].money))
-        players[i].show_state()
+        # players[i].show_state()
+
+        if(type[i] == "p"):
+            total_time = time.time() - t0
+            db.updatePlayerStat(db,players[i].name,getPlayerResult(i),round(total_time,2),getAmount(i,players[i].bet if not bjs[i] else 1.5 * players[i].bet))
+            db.updateCardStats(db,players[i].name,getCardDictFromList(players[i].get_stats()))
+
 
 total_time = time.time() - t0
 print ('Game time: ' + str(total_time))
