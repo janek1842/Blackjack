@@ -1024,7 +1024,7 @@ class Ui_MainWindow(object):
     def rankButtonFunction(self):
         db = blackjack.DataBase()
         result = db.getRank()
-        self.rankingListModel = TableModel(result, ['Username', 'Money', 'Winratio'])
+        self.rankingListModel = TableModel(result, ['Username', 'Money', 'WinRatio'])
         self.rankingList.setModel(self.rankingListModel)
         self.rankingList.selectRow(0)
         self.stackedWidget.setCurrentWidget(self.rankingPage)
@@ -1044,8 +1044,8 @@ class Ui_MainWindow(object):
 
         self.st_1.setText(str(playerStat["HandsPlayed"]))
         self.st_2.setText(str(playerStat["WonHands"]))
-        self.st_3.setText(str(playerStat["WinRatio"]))
-        self.st_6.setText(str(playerStat["AverageTimeToMove"]))
+        self.st_3.setText(str(round(playerStat["WinRatio"],2)))
+        self.st_6.setText(str(round(playerStat["AverageTimeToMove"],2)))
         self.st_7.setText(str(playerStat["MostPickedCard"]))
         self.st_5.setText(str(playerStat["CardsGotten"]))
 
