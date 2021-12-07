@@ -22,13 +22,8 @@ def pick_a_card(cards, remove = True, manual = False):
 def calc_points(cards, base_val = 21):
     card_values = {'A' : 11, 'J' : 10, 'Q' : 10, 'K' : 10, '2' : 2, '3' : 3, '4' : 4, '5' : 5, '6' : 6, '7' : 7, '8' : 8, '9' : 9, '10' : 10}
     points = 0
-    A_present = False
     for i in range(len(cards)):
         points += card_values[cards[i].split('_')[-1]]
-        if cards[i].split('_')[-1] == 'A':
-            A_present = True
-    if points > base_val and A_present:
-        points -= 10
     return points
 
 

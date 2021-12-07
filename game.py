@@ -102,6 +102,7 @@ for i in range(number_of_players):
 
         print(' ****************** PLAYER - %s ****************' % players[i].name)
         players[i].show_state()
+        left_over[i] = players[i].points
         if bjs[i]:
             left_over[i] = players[i].points
         else:
@@ -134,6 +135,7 @@ for i in range(number_of_players):
 
         print(' ****************** PLAYER - %s ****************' % players[i].name)
         players[i].show_state()
+        left_over[i] = players[i].points
         if bjs[i]:
             left_over[i] = players[i].points
         else:
@@ -169,6 +171,7 @@ for i in range(number_of_players):
 
         print(' ****************** PLAYER - %s ****************' % players[i].name)
         players[i].show_state()
+        left_over[i] = players[i].points
         if bjs[i]:
             left_over[i] = players[i].points
         else:
@@ -204,6 +207,7 @@ for i in range(number_of_players):
 
         print(' ****************** PLAYER - %s ****************' % players[i].name)
         players[i].show_state()
+        left_over[i] = players[i].points
         if bjs[i]:
             left_over[i] = players[i].points
         else:
@@ -254,12 +258,9 @@ left_over = np.array(left_over)
 print(left_over)
 for l in range(number_of_players):
     print(left_over[l])
-    # Adrian sprawdz to
-    try:
-        if left_over[l] > 21:
-            left_over[l] = 0
-    except Exception:
-        pass
+    if left_over[l] > 21:
+        left_over[l] = 0
+
 print(left_over)
 for k in range(number_of_players):
     if (max(left_over) == left_over[k]) and left_over[k]>0:
