@@ -207,9 +207,7 @@ class DataBase:
             cur = con.cursor()
             cur.execute('SELECT username,money, CASE WHEN gameAmount>0 THEN round(winsAmount*1.0/gameAmount,2) ELSE 0 END ratio'
                         ' FROM players,statistics where statistics.playerID=players.playerID ORDER BY money DESC')
-
             rankStat = cur.fetchall()
-            print("Oto on", rankStat)
             return rankStat
 
         def updateAvatar(self,username,avatar):

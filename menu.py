@@ -897,7 +897,7 @@ class Ui_MainWindow(object):
         self.st_11.setText(_translate("MainWindow", "TextLabel"))
         self.st_19.setText(_translate("MainWindow", "TextLabel"))
         self.st_17.setText(_translate("MainWindow", "TextLabel"))
-        self.stl_6.setText(_translate("MainWindow", "Avarage time to move"))
+        self.stl_6.setText(_translate("MainWindow", "Avarage game time [s]"))
         self.st_6.setText(_translate("MainWindow", "TextLabel"))
         self.userStatLabel.setText(_translate("MainWindow", "STATISTICS OF"))
         self.backToRankButton.setText(_translate("MainWindow", "BACK"))
@@ -931,6 +931,7 @@ class Ui_MainWindow(object):
         self.adminListModel = TableModel(result, ['Username', 'isActive', 'isAdmin'])
         self.adminList.setModel(self.adminListModel)
         self.adminList.selectRow(index)
+        self.adminList.setStyleSheet("selection-color: black ;selection-background-color: #FFC30B;")
 
     def adminBanButtonFunction(self):
         index = self.adminList.currentIndex().row()
@@ -995,6 +996,7 @@ class Ui_MainWindow(object):
         self.rankingList.setModel(self.rankingListModel)
         self.rankingList.selectRow(0)
         self.stackedWidget.setCurrentWidget(self.rankingPage)
+        self.rankingList.setStyleSheet("selection-color: black ;selection-background-color: #FFC30B;")
         print('show actual ranking, by money')
 
     def statButtonFunction(self):
