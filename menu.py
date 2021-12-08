@@ -952,7 +952,10 @@ class Ui_MainWindow(object):
             self.stackedWidget.setCurrentWidget(self.adminPage)
             print("Admin page")
         else:
-            print('not allowed to access')
+            msg = QtWidgets.QMessageBox()
+            msg.setWindowTitle("ERROR")
+            msg.setText("Not allowed to access! Admin need to be logged in.")
+            x = msg.exec_()
 
     def loadAdminList(self, index):
         db = blackjack.DataBase()
