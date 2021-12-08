@@ -921,9 +921,13 @@ class Ui_MainWindow(object):
         self.ManageDialog.exec()
 
     def adminButtonFunction(self):
-        self.loadAdminList(0)
-        self.stackedWidget.setCurrentWidget(self.adminPage)
-        print('admin panel')
+        db = blackjack.DataBase()
+        if(blackjack.DataBase.checkIfAdminPresent(db,self.loggedUsers[0].username,self.loggedUsers[1].username,self.loggedUsers[2].username,self.loggedUsers[3].username,self.loggedUsers[4].username)):
+            self.loadAdminList(0)
+            self.stackedWidget.setCurrentWidget(self.adminPage)
+            print("Admin page")
+        else:
+            print('not allowed to access')
 
     def loadAdminList(self, index):
         db = blackjack.DataBase()

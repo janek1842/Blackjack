@@ -55,12 +55,14 @@ class DataBase:
                     crypter.encrypt_message("tajnehaslo")))
                 con.execute("INSERT INTO players values(null,'player5','{}',5000,'False','False','anubis.png',null) on conflict do nothing ".format(
                     crypter.encrypt_message("tajnehaslo")))
+                con.execute("INSERT INTO players values(null,'adminadmin','{}',5000,'True','True','anubis.png','Attention! I amm admin') on conflict do nothing ".format(
+                        crypter.encrypt_message("adminadmin")))
                 con.execute("INSERT INTO statistics values('{}',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) on conflict do nothing ".format(1))
                 con.execute("INSERT INTO statistics values('{}',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) on conflict do nothing ".format(2))
                 con.execute("INSERT INTO statistics values('{}',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) on conflict do nothing".format(3))
                 con.execute("INSERT INTO statistics values('{}',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) on conflict do nothing".format(4))
                 con.execute("INSERT INTO statistics values('{}',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) on conflict do nothing".format(5))
-
+                con.execute("INSERT INTO statistics values('{}',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) on conflict do nothing".format(6))
             except sqlite3.OperationalError:
                 print("cos nie tak ")
             con.commit()
@@ -82,7 +84,7 @@ class DataBase:
             cur = con.cursor()
             playerChecker = False
             if(self.checkIfPlayerExists(username)==False):
-                cur.execute("INSERT INTO players values(null,'{}','{}',0,0,0,'anubis.png',null) ".format(username,crypter.encrypt_message(password)))
+                cur.execute("INSERT INTO players values(null,'{}','{}',0,'True','False','anubis.png',null) ".format(username,crypter.encrypt_message(password)))
                 cur.execute('SELECT playerID FROM players where username=?',(username,))
                 playerID= cur.fetchone()[0]
                 cur.execute("INSERT INTO statistics values('{}',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) ".format(playerID))
@@ -97,6 +99,9 @@ class DataBase:
         def validateLogin(self,username,password):
             result = False
             if(self.checkIfPlayerExists(username)==False):
+                pass
+            elif(self.getPlayer(username)["isActive"]=='False'):
+                print("UNSUCCESFUL LOGIN DUE TO BAN :( ")
                 pass
             else:
                 result = self.validatePassword(username,password)
