@@ -1,4 +1,7 @@
 import sqlite3
+
+from PyQt5.uic.properties import QtWidgets
+
 import crypter
 
 class DataBase:
@@ -98,14 +101,16 @@ class DataBase:
 
         def validateLogin(self,username,password):
             result = False
+            banFlag = False
             if(self.checkIfPlayerExists(username)==False):
                 pass
             elif(self.getPlayer(username)["isActive"]=='False'):
-                print("UNSUCCESFUL LOGIN DUE TO BAN :( ")
+                print("BAN!")
+                banFlag=True
                 pass
             else:
                 result = self.validatePassword(username,password)
-            return result
+            return result,banFlag
 
         def validatePassword(self,username,password):
             con = sqlite3.connect('database.db')

@@ -210,7 +210,7 @@ class Ui_LoginDialog(object):
 
     def loginUser(self, login, password):
         db = blackjack.DataBase()
-        result = db.validateLogin(login, password)
+        result,banFlag = db.validateLogin(login, password)
         print(result)
         if (result):
             print("UDANE LOGOWANIE !")
@@ -233,6 +233,11 @@ class Ui_LoginDialog(object):
             #LoginDialog.close()            #TODO zamykanie, nie dziala :(
             #LoginDialog.done(2)
             #LoginDialog.accept()
+        elif(banFlag):
+            msg = QtWidgets.QMessageBox()
+            msg.setWindowTitle("ERROR")
+            msg.setText("You are banned! Please contact admin.")
+            x = msg.exec_()
         else:
             self.errorLabel1.setText("UNSUCCESFULL !")
 
