@@ -306,6 +306,7 @@ class Ui_MainWindow(object):
         self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.verticalLayoutWidget_4)
         self.verticalLayout_6.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_6.setObjectName("verticalLayout_6")
+        self.verticalLayout_6.setSpacing(50)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setSpacing(14)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
@@ -326,6 +327,9 @@ class Ui_MainWindow(object):
         self.deck3rb = QtWidgets.QRadioButton()
         self.deck3rb.setObjectName("deck3rb")
         self.horizontalLayout_2.addWidget(self.deck3rb)
+        self.deck1rb.setStyleSheet("QRadioButton {font-size: 20px;color: #FEFE58; font-weight: bold;}")
+        self.deck2rb.setStyleSheet("QRadioButton {font-size: 20px;color: #FEFE58; font-weight: bold;}")
+        self.deck3rb.setStyleSheet("QRadioButton {font-size: 20px;color: #FEFE58; font-weight: bold;}")
         self.verticalLayout_6.addLayout(self.horizontalLayout_2)
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_3.setSpacing(14)
@@ -334,26 +338,30 @@ class Ui_MainWindow(object):
         self.label_2.setFont(font)
         self.label_2.setObjectName("label_2")
         self.horizontalLayout_3.addWidget(self.label_2)
-        self.verticalLayout_7 = QtWidgets.QVBoxLayout()
-        self.verticalLayout_7.setObjectName("verticalLayout_7")
-        self.deckSkin_1 = QtWidgets.QLabel(self.verticalLayoutWidget_4)
-        self.deckSkin_1.setText("")
-        self.deckSkin_1.setObjectName("deckSkin_1")
-        self.verticalLayout_7.addWidget(self.deckSkin_1)
         self.skin1rb = QtWidgets.QRadioButton()
         self.skin1rb.setObjectName("skin1rb")
-        self.verticalLayout_7.addWidget(self.skin1rb)
-        self.horizontalLayout_3.addLayout(self.verticalLayout_7)
-        self.verticalLayout_8 = QtWidgets.QVBoxLayout()
-        self.verticalLayout_8.setObjectName("verticalLayout_8")
-        self.deckSkin_2 = QtWidgets.QLabel(self.verticalLayoutWidget_4)
-        self.deckSkin_2.setText("")
-        self.deckSkin_2.setObjectName("deckSkin_2")
-        self.verticalLayout_8.addWidget(self.deckSkin_2)
+        self.skin1rb.setStyleSheet("QRadioButton::indicator {"
+                           "width: 91px;"
+                           "height: 128px;"
+                           "image: url(images/cards/set1/Aserce)}"
+                                                                 "QRadioButton::indicator::checked {"
+                                                                 "width: 81px;"
+                                                                 "height: 118px;"
+                                                                 "border : 5px solid yellow;"
+                                                                 "}")
+        self.horizontalLayout_3.addWidget(self.skin1rb)
         self.skin2rb = QtWidgets.QRadioButton()
         self.skin2rb.setObjectName("skin2rb")
-        self.verticalLayout_8.addWidget(self.skin2rb)
-        self.horizontalLayout_3.addLayout(self.verticalLayout_8)
+        self.skin2rb.setStyleSheet("QRadioButton::indicator {"
+                           "width: 91px;"
+                           "height: 128px;"
+                           "image: url(images/cards/set2/Aserce)}"
+                                                                 "QRadioButton::indicator::checked {"
+                                                                 "width: 81px;"
+                                                                 "height: 118px;"
+                                                                 "border : 5px solid yellow;"
+                                                                 "}")
+        self.horizontalLayout_3.addWidget(self.skin2rb)
         self.verticalLayout_6.addLayout(self.horizontalLayout_3)
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_4.setSpacing(14)
@@ -364,11 +372,14 @@ class Ui_MainWindow(object):
         self.horizontalLayout_4.addWidget(self.label_3)
         self.timeSlider = QtWidgets.QSlider(self.verticalLayoutWidget_4)
         self.timeSlider.setOrientation(QtCore.Qt.Horizontal)
+        self.timeSlider.setRange(5, 15)
         self.timeSlider.setObjectName("timeSlider")
         self.horizontalLayout_4.addWidget(self.timeSlider)
         self.timeSecondsLabel = QtWidgets.QLabel(self.verticalLayoutWidget_4)
         self.timeSecondsLabel.setFont(font)
         self.timeSecondsLabel.setObjectName("timeSecondsLabel")
+        self.timeSlider.valueChanged.connect(self.timeSliderFunction)
+        self.timeSlider.setValue(10)
         self.horizontalLayout_4.addWidget(self.timeSecondsLabel)
         self.verticalLayout_6.addLayout(self.horizontalLayout_4)
         self.stackedWidget.addWidget(self.setupPage)
@@ -515,6 +526,10 @@ class Ui_MainWindow(object):
         self.tableImageLabel.setGeometry(QtCore.QRect(0, 0, 862, 662))
         self.pixmapTable = QPixmap('images/others/table.jpg').scaled(862, 662)
         self.tableImageLabel.setPixmap(self.pixmapTable)
+        self.deckImageLabel = QtWidgets.QLabel(self.playPage)
+        self.deckImageLabel.setGeometry(QtCore.QRect(391, 281, 80, 100))
+        self.pixmapDeck = QPixmap('images/others/talia2_main.png').scaled(80, 100)
+        self.deckImageLabel.setPixmap(self.pixmapDeck)
         self.tableImageLabel.setText("")
         self.tableImageLabel.setObjectName("tableImageLabel")
         self.stackedWidget.addWidget(self.playPage)
@@ -735,8 +750,11 @@ class Ui_MainWindow(object):
         self.deckNumberGroup.addButton(self.deck1rb)
         self.deckNumberGroup.addButton(self.deck2rb)
         self.deckNumberGroup.addButton(self.deck3rb)
+
+        self.deck1rb.setChecked(True)
         self.deckSkinGroup.addButton(self.skin1rb)
         self.deckSkinGroup.addButton(self.skin2rb)
+        self.skin1rb.setChecked(True)
 
         # BUTTONS FUNCTIONS
         self.loginButton_1.clicked.connect(lambda: self.openLoginDialog(0, self.userSW_1, self.username_1, self.avatarKn_1))
@@ -783,6 +801,12 @@ class Ui_MainWindow(object):
         self.setUserTestButton.setText('TEST')
         self.setUserTestButton.clicked.connect(self.testLoggedUsers)
 
+        self.addCardTestButton = QtWidgets.QPushButton(self.playPage)
+        self.addCardTestButton.setGeometry(QtCore.QRect(300, 670, 75, 23))
+        self.addCardTestButton.setObjectName("addCardTestButton")
+        self.addCardTestButton.setText('add')
+        self.addCardTestButton.clicked.connect(self.addCardTest)
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
@@ -821,10 +845,8 @@ class Ui_MainWindow(object):
         self.deck2rb.setText(_translate("MainWindow", "2"))
         self.deck3rb.setText(_translate("MainWindow", "3"))
         self.label_2.setText(_translate("MainWindow", "DECK SKIN"))
-        self.skin1rb.setText(_translate("MainWindow", "SKIN 1"))
-        self.skin2rb.setText(_translate("MainWindow", "SKIN 2"))
         self.label_3.setText(_translate("MainWindow", "TIME TO MOVE"))
-        self.timeSecondsLabel.setText(_translate("MainWindow", "S"))
+        self.timeSecondsLabel.setText(_translate("MainWindow", "10 s"))
         self.betLabel.setText(_translate("MainWindow", "$"))
         self.betButton.setText(_translate("MainWindow", "BET"))
         self.hitButton.setText(_translate("MainWindow", "HIT"))
@@ -902,6 +924,9 @@ class Ui_MainWindow(object):
         self.userStatLabel.setText(_translate("MainWindow", "STATISTICS OF"))
         self.backToRankButton.setText(_translate("MainWindow", "BACK"))
 
+    def timeSliderFunction(self, value):
+        self.timeSecondsLabel.setText(str(value)+' s')
+
     def openLoginDialog(self, index, stWid, username, avatar):
         self.LoginDialog = QtWidgets.QDialog()
         self.ui = Ui_LoginDialog(self.loggedUsers, index, stWid, username, avatar)
@@ -927,10 +952,7 @@ class Ui_MainWindow(object):
             self.stackedWidget.setCurrentWidget(self.adminPage)
             print("Admin page")
         else:
-            msg = QtWidgets.QMessageBox()
-            msg.setWindowTitle("ERROR")
-            msg.setText("Not allowed to access! Admin need to be logged in.")
-            x = msg.exec_()
+            print('not allowed to access')
 
     def loadAdminList(self, index):
         db = blackjack.DataBase()
@@ -977,10 +999,54 @@ class Ui_MainWindow(object):
         print('setup game')
 
     def startGameButtonFunction(self):
-        print('players: ', self.comboBox.getUsers())
-        self.hands = UserHands(self.comboBox.getUsers(), self.playPage)
-        self.stackedWidget.setCurrentWidget(self.playPage)
-        print('start game')
+        players = self.comboBox.getUsers()
+        print('players: ', players)
+        if len(players) >= 2:
+
+            users = []
+            for el in players:
+                if el == 'AI(easy)':
+                    users.append('easy')
+                elif el == 'AI(medium)':
+                    users.append('medium')
+                elif el == 'AI(hard)':
+                    users.append('hard')
+                else:
+                    users.append('player')
+
+            users2 = []
+            for el in players:
+                if el == 'AI(easy)':
+                    users2.append([el, 'easy3.png'])
+                elif el == 'AI(medium)':
+                    users2.append([el, 'medium3.png'])
+                elif el == 'AI(hard)':
+                    users2.append([el, 'hard3.png'])
+                else:
+                    for user in self.loggedUsers:
+                        if el == user.username:
+                            users2.append([el, user.avatar])
+
+            numberOfDecks = int(self.deckNumberGroup.checkedButton().text())
+            timeToMove = self.timeSlider.value()
+            game_start_data = {'numberOfUsers': len(players), 'users': users, 'numberOfDecks': numberOfDecks,
+                               'timeToMove': timeToMove}
+            if self.skin1rb.isChecked():
+                skin = 'set1'
+            else:
+                skin = 'set2'
+            print(game_start_data, skin)
+
+            print(users2)
+            self.hands = UserHands(users2, skin, self.playPage)                  #   rysowanie
+
+            self.stackedWidget.setCurrentWidget(self.playPage)
+            print('start game')
+        else:
+            msg = QtWidgets.QMessageBox()
+            msg.setWindowTitle("ERROR")
+            msg.setText("Need at least 2 players")
+            x = msg.exec_()
 
     def exitButtonFunction(self):
         self.hands.setParent(None)
@@ -1058,6 +1124,13 @@ class Ui_MainWindow(object):
         for i in range(5):
             print(i, self.loggedUsers[i].username, self.loggedUsers[i].avatar, self.loggedUsers[i].isAdmin)
 
+    def addCardTest(self):
+        print('add card')
+        print(self.hands)
+        print(self.hands.hands[0])
+        self.hands.hands[0].addCard('2karo')
+
+
 
 class LoggedUser(object):
     def __init__(self):
@@ -1110,17 +1183,17 @@ class TableModel(QtCore.QAbstractTableModel):
 
 
 class UserHands(QtWidgets.QWidget):
-    def __init__(self, players, parent=None):
+    def __init__(self, players, skin, parent=None):
         super(UserHands, self).__init__(parent)
-        hands = []
+        self.hands = []
         for i in range(len(players)):
-            hand = UserHand(math.pi * 2 / len(players), i, players[i], self)
+            hand = UserHand(math.pi * 2 / len(players), i, players[i], skin, self)
             hand.addCard('2karo')
-            hands.append(hand)
+            self.hands.append(hand)
 
 
 class UserHand(QtWidgets.QWidget):
-    def __init__(self, angle, index, user, parent=None):
+    def __init__(self, angle, index, user, skin, parent=None):
         super(UserHand, self).__init__(parent)
         self.setStyleSheet("background: ")                                      #zeby przeswitywalo
         r = 250                                                                 #ustawianie miejsca
@@ -1139,22 +1212,23 @@ class UserHand(QtWidgets.QWidget):
         self.avatar = QtWidgets.QLabel()
         self.avatar.setAlignment(Qt.AlignCenter)
         self.hBox2.addWidget(self.avatar)
-        self.pixmapAvatar = QPixmap('images/avatars/default.png').scaled(41,41)
+        self.pixmapAvatar = QPixmap('images/avatars/'+user[1]).scaled(41,41)
         self.vBox2 = QtWidgets.QVBoxLayout()
         self.hBox2.addLayout(self.vBox2)
         self.avatar.setPixmap(self.pixmapAvatar)
         self.username = QtWidgets.QLabel()
-        self.username.setText(user)
+        self.username.setText(user[0])
         self.points = QtWidgets.QLabel()
         self.points.setText("Points")
         self.vBox2.addWidget(self.username)
         self.vBox2.addWidget(self.points)
+        self.skin = skin
 
     def addCard(self, cardname):                    #tutaj jakas animacje pewnie
         self.card = QtWidgets.QLabel()
-        self.hBox.addWidget(self.card)
-        self.pixmapCard = QPixmap('images/cards/set2/'+cardname+'.png').scaled(80, 100)
+        self.pixmapCard = QPixmap('images/cards/'+self.skin+'/'+cardname+'.png').scaled(80, 100)
         self.card.setPixmap(self.pixmapCard)
+        self.hBox.addWidget(self.card)
 
     def removeCards(self):                          #tak to chyba usuwa
         while self.hBox.count():
