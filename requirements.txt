@@ -1,2 +1,4 @@
-cryptography~=35.0.0
-PyQt5~=5.15.6
+numpy==1.21.4
+PyQt5==5.15.6
+cryptography==35.0.0
+np==1.0.2

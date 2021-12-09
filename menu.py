@@ -795,17 +795,17 @@ class Ui_MainWindow(object):
         self.statButton.clicked.connect(self.statButtonFunction)
 
         # testowy button
-        self.setUserTestButton = QtWidgets.QPushButton(self.mainMenuPage)
-        self.setUserTestButton.setGeometry(QtCore.QRect(1010, 670, 75, 23))
-        self.setUserTestButton.setObjectName("setUserTestButton")
-        self.setUserTestButton.setText('TEST')
-        self.setUserTestButton.clicked.connect(self.testLoggedUsers)
-
-        self.addCardTestButton = QtWidgets.QPushButton(self.playPage)
-        self.addCardTestButton.setGeometry(QtCore.QRect(300, 670, 75, 23))
-        self.addCardTestButton.setObjectName("addCardTestButton")
-        self.addCardTestButton.setText('add')
-        self.addCardTestButton.clicked.connect(self.addCardTest)
+        # self.setUserTestButton = QtWidgets.QPushButton(self.mainMenuPage)
+        # self.setUserTestButton.setGeometry(QtCore.QRect(1010, 670, 75, 23))
+        # self.setUserTestButton.setObjectName("setUserTestButton")
+        # self.setUserTestButton.setText('TEST')
+        # self.setUserTestButton.clicked.connect(self.testLoggedUsers)
+        #
+        # self.addCardTestButton = QtWidgets.QPushButton(self.playPage)
+        # self.addCardTestButton.setGeometry(QtCore.QRect(300, 670, 75, 23))
+        # self.addCardTestButton.setObjectName("addCardTestButton")
+        # self.addCardTestButton.setText('add')
+        # self.addCardTestButton.clicked.connect(self.addCardTest)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
