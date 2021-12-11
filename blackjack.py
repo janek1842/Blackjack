@@ -48,6 +48,19 @@ class DataBase:
                     FOREIGN KEY(playerID) REFERENCES players(playerID)
                 ) ''')
 
+            # admin and AI algorithms
+
+                con.execute("INSERT INTO players values(null,'adminadmin','{}',5000,'True','True','admin.png','Attention! I am admin') on conflict do nothing ".format(crypter.encrypt_message("adminadmin")))
+                con.execute("INSERT INTO players values(null,'AI- hard','{}',5000,'True','False','hard3.png','Watch out! I am hard player') on conflict do nothing ".format(crypter.encrypt_message("supertajnehaslo")))
+                con.execute("INSERT INTO players values(null,'AI- medium','{}',5000,'True','False','medium3.png','Attention! I am medium player') on conflict do nothing ".format(crypter.encrypt_message("supertajnehaslo")))
+                con.execute("INSERT INTO players values(null,'AI- easy','{}',5000,'True','False','easy3.png','Do not be scared! I am easy') on conflict do nothing ".format(crypter.encrypt_message("supertajnehaslo")))
+
+                con.execute("INSERT INTO statistics values('{}',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) on conflict do nothing ".format(1))
+                con.execute("INSERT INTO statistics values('{}',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) on conflict do nothing ".format(2))
+                con.execute("INSERT INTO statistics values('{}',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) on conflict do nothing".format(3))
+
+            # For tests only -----------
+
                 con.execute("INSERT INTO players values(null,'player1','{}',1000,'False','False','anubis.png',null) on conflict do nothing".format(
                     crypter.encrypt_message("tajnehaslo")))
                 con.execute("INSERT INTO players values(null,'player2','{}',2000,'False','False','anubis.png',null) on conflict do nothing ".format(
@@ -58,14 +71,15 @@ class DataBase:
                     crypter.encrypt_message("tajnehaslo")))
                 con.execute("INSERT INTO players values(null,'player5','{}',5000,'False','False','anubis.png',null) on conflict do nothing ".format(
                     crypter.encrypt_message("tajnehaslo")))
-                con.execute("INSERT INTO players values(null,'adminadmin','{}',5000,'True','True','anubis.png','Attention! I amm admin') on conflict do nothing ".format(
-                        crypter.encrypt_message("adminadmin")))
-                con.execute("INSERT INTO statistics values('{}',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) on conflict do nothing ".format(1))
-                con.execute("INSERT INTO statistics values('{}',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) on conflict do nothing ".format(2))
-                con.execute("INSERT INTO statistics values('{}',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) on conflict do nothing".format(3))
-                con.execute("INSERT INTO statistics values('{}',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) on conflict do nothing".format(4))
-                con.execute("INSERT INTO statistics values('{}',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) on conflict do nothing".format(5))
+
+                con.execute("INSERT INTO statistics values('{}',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) on conflict do nothing ".format(4))
+                con.execute("INSERT INTO statistics values('{}',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) on conflict do nothing ".format(5))
                 con.execute("INSERT INTO statistics values('{}',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) on conflict do nothing".format(6))
+                con.execute("INSERT INTO statistics values('{}',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) on conflict do nothing".format(7))
+                con.execute("INSERT INTO statistics values('{}',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) on conflict do nothing".format(8))
+                con.execute("INSERT INTO statistics values('{}',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) on conflict do nothing".format(9))
+            # -------------
+
             except sqlite3.OperationalError:
                 print("cos nie tak ")
             con.commit()

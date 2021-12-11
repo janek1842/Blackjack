@@ -279,11 +279,28 @@ for i in range(number_of_players):
         players[i].name, wstate, gstate, players[i].bet if not bjs[i] else 1.5 * players[i].bet, players[i].money))
         # players[i].show_state()
 
+        # W TYM MIEJSCU JEST ZRZUCANIE STATYSTYK DO BAZY DANYCH PO ZAKOŃCZONEJ ROZGRYWCE !
+        # user
         if(type[i] == "p"):
             total_time = time.time() - t0
             db.updatePlayerStat(db,players[i].name,getPlayerResult(i),round(total_time,2),getAmount(i,players[i].bet if not bjs[i] else 1.5 * players[i].bet))
             db.updateCardStats(db,players[i].name,getCardDictFromList(players[i].get_stats()))
-
+        # AI easy
+        if (type[i] == "e"):
+            total_time = time.time() - t0
+            db.updatePlayerStat(db, 'AI- easy', getPlayerResult(i), round(total_time, 2),getAmount(i, players[i].bet if not bjs[i] else 1.5 * players[i].bet))
+            db.updateCardStats(db, 'AI- easy', getCardDictFromList(players[i].get_stats()))
+        # AI medium
+        if (type[i] == "m"):
+            total_time = time.time() - t0
+            db.updatePlayerStat(db, 'AI- medium', getPlayerResult(i), round(total_time, 2),getAmount(i, players[i].bet if not bjs[i] else 1.5 * players[i].bet))
+            db.updateCardStats(db, 'AI- medium' , getCardDictFromList(players[i].get_stats()))
+        # AI hard
+        if (type[i] == "h"):
+            total_time = time.time() - t0
+            db.updatePlayerStat(db, 'AI- hard', getPlayerResult(i), round(total_time, 2),getAmount(i, players[i].bet if not bjs[i] else 1.5 * players[i].bet))
+            db.updateCardStats(db, 'AI- hard' , getCardDictFromList(players[i].get_stats()))
+        # W TYM MIEJSCU SIE TO KONCZY !
 
 total_time = time.time() - t0
 print ('Game time: ' + str(total_time))
