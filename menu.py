@@ -9,7 +9,7 @@
 import time
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, QPropertyAnimation, QPoint
 from PyQt5.QtGui import QPixmap
 
 import blackjack
@@ -134,7 +134,7 @@ class Ui_MainWindow(object):
         self.page1_1.setObjectName("page1_1")
         self.avatarUn_1 = QtWidgets.QLabel(self.page1_1)
         self.avatarUn_1.setGeometry(QtCore.QRect(10, 10, 61, 61))
-        self.pixmapUn = QPixmap('images/avatars/default.png').scaled(61,61)
+        self.pixmapUn = QPixmap('images/avatars/default.png').scaled(61, 61)
         self.avatarUn_1.setPixmap(self.pixmapUn)
         self.avatarUn_1.setText("")
         self.avatarUn_1.setObjectName("avatarUn_1")
@@ -279,6 +279,10 @@ class Ui_MainWindow(object):
         self.logoutButton_5.setObjectName("logoutButton_5")
         self.userSW_5.addWidget(self.page2_5)
         self.verticalLayout_3.addWidget(self.userSW_5)
+        self.tutorialButton = QtWidgets.QPushButton(self.mainMenuPage)
+        self.tutorialButton.setGeometry(QtCore.QRect(1060, 0, 75, 23))
+        self.tutorialButton.setObjectName("tutorialButton")
+        self.tutorialButton.setText("TUTORIAL")
         self.adminPanelButton = QtWidgets.QPushButton(self.mainMenuPage)
         self.adminPanelButton.setGeometry(QtCore.QRect(1160, 0, 75, 23))
         self.adminPanelButton.setObjectName("adminPanelButton")
@@ -307,6 +311,11 @@ class Ui_MainWindow(object):
         self.verticalLayout_6.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout_6.setObjectName("verticalLayout_6")
         self.verticalLayout_6.setSpacing(50)
+        self.verticalLayout_6.setAlignment(Qt.AlignCenter)
+        self.settingsLabel = QtWidgets.QLabel(self.setupPage)
+        self.settingsLabel.setText("SETTINGS:")
+        self.settingsLabel.setStyleSheet("font-size: 30px;color: #FEFE58; font-weight: bold;")
+        self.verticalLayout_6.addWidget(self.settingsLabel)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setSpacing(14)
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
@@ -341,26 +350,26 @@ class Ui_MainWindow(object):
         self.skin1rb = QtWidgets.QRadioButton()
         self.skin1rb.setObjectName("skin1rb")
         self.skin1rb.setStyleSheet("QRadioButton::indicator {"
-                           "width: 91px;"
-                           "height: 128px;"
-                           "image: url(images/cards/set1/Aserce)}"
-                                                                 "QRadioButton::indicator::checked {"
-                                                                 "width: 81px;"
-                                                                 "height: 118px;"
-                                                                 "border : 5px solid yellow;"
-                                                                 "}")
+                                   "width: 91px;"
+                                   "height: 128px;"
+                                   "image: url(images/cards/set1/Aserce)}"
+                                   "QRadioButton::indicator::checked {"
+                                   "width: 81px;"
+                                   "height: 118px;"
+                                   "border : 5px solid yellow;"
+                                   "}")
         self.horizontalLayout_3.addWidget(self.skin1rb)
         self.skin2rb = QtWidgets.QRadioButton()
         self.skin2rb.setObjectName("skin2rb")
         self.skin2rb.setStyleSheet("QRadioButton::indicator {"
-                           "width: 91px;"
-                           "height: 128px;"
-                           "image: url(images/cards/set2/Aserce)}"
-                                                                 "QRadioButton::indicator::checked {"
-                                                                 "width: 81px;"
-                                                                 "height: 118px;"
-                                                                 "border : 5px solid yellow;"
-                                                                 "}")
+                                   "width: 91px;"
+                                   "height: 128px;"
+                                   "image: url(images/cards/set2/Aserce)}"
+                                   "QRadioButton::indicator::checked {"
+                                   "width: 81px;"
+                                   "height: 118px;"
+                                   "border : 5px solid yellow;"
+                                   "}")
         self.horizontalLayout_3.addWidget(self.skin2rb)
         self.verticalLayout_6.addLayout(self.horizontalLayout_3)
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
@@ -370,14 +379,14 @@ class Ui_MainWindow(object):
         self.label_3.setFont(font)
         self.label_3.setObjectName("label_3")
         self.horizontalLayout_4.addWidget(self.label_3)
+        self.timeSecondsLabel = QtWidgets.QLabel(self.verticalLayoutWidget_4)
+        self.timeSecondsLabel.setFont(font)
+        self.timeSecondsLabel.setObjectName("timeSecondsLabel")
         self.timeSlider = QtWidgets.QSlider(self.verticalLayoutWidget_4)
         self.timeSlider.setOrientation(QtCore.Qt.Horizontal)
         self.timeSlider.setRange(5, 15)
         self.timeSlider.setObjectName("timeSlider")
         self.horizontalLayout_4.addWidget(self.timeSlider)
-        self.timeSecondsLabel = QtWidgets.QLabel(self.verticalLayoutWidget_4)
-        self.timeSecondsLabel.setFont(font)
-        self.timeSecondsLabel.setObjectName("timeSecondsLabel")
         self.timeSlider.valueChanged.connect(self.timeSliderFunction)
         self.timeSlider.setValue(10)
         self.horizontalLayout_4.addWidget(self.timeSecondsLabel)
@@ -387,151 +396,83 @@ class Ui_MainWindow(object):
         # PLAY PAGE
         self.playPage = QtWidgets.QWidget()
         self.playPage.setObjectName("playPage")
-        self.verticalLayoutWidget_7 = QtWidgets.QWidget(self.playPage)
-        self.verticalLayoutWidget_7.setGeometry(QtCore.QRect(910, 570, 311, 121))
-        self.verticalLayoutWidget_7.setObjectName("verticalLayoutWidget_7")
-        self.verticalLayout_9 = QtWidgets.QVBoxLayout(self.verticalLayoutWidget_7)
-        self.verticalLayout_9.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout_9.setSpacing(5)
-        self.verticalLayout_9.setObjectName("verticalLayout_9")
-        self.horizontalLayout_9 = QtWidgets.QHBoxLayout()
-        self.horizontalLayout_9.setObjectName("horizontalLayout_9")
-        self.horizontalSlider = QtWidgets.QSlider(self.verticalLayoutWidget_7)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.MinimumExpanding, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.horizontalSlider.sizePolicy().hasHeightForWidth())
-        self.horizontalSlider.setSizePolicy(sizePolicy)
-        self.horizontalSlider.setOrientation(QtCore.Qt.Horizontal)
-        self.horizontalSlider.setObjectName("horizontalSlider")
-        self.horizontalLayout_9.addWidget(self.horizontalSlider)
-        self.betLabel = QtWidgets.QLabel(self.verticalLayoutWidget_7)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Preferred)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.betLabel.sizePolicy().hasHeightForWidth())
-        self.betLabel.setSizePolicy(sizePolicy)
+        self.betLabel = QtWidgets.QLabel(self.playPage)
+        self.betLabel.setGeometry(QtCore.QRect(700, 670, 100, 21))
         self.betLabel.setObjectName("betLabel")
-        self.horizontalLayout_9.addWidget(self.betLabel)
-        self.verticalLayout_9.addLayout(self.horizontalLayout_9)
-        self.betButton = QtWidgets.QPushButton(self.verticalLayoutWidget_7)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.betButton.sizePolicy().hasHeightForWidth())
-        self.betButton.setSizePolicy(sizePolicy)
+        self.betLabel.setStyleSheet("font-size: 20px;color: #FEFE58; font-weight: bold;")
+        self.betSlider = QtWidgets.QSlider(self.playPage)
+        self.betSlider.setGeometry(QtCore.QRect(500, 670, 150, 21))
+        self.betSlider.setOrientation(QtCore.Qt.Horizontal)
+        self.betSlider.setObjectName("betSlider")
+        self.betSlider.setRange(10, 100)
+        self.betSlider.valueChanged.connect(self.betSliderFunction)
+        self.betSlider.setValue(50)
+        self.betButton = QtWidgets.QPushButton(self.playPage)
+        self.betButton.setGeometry(QtCore.QRect(800, 670, 100, 30))
         self.betButton.setObjectName("betButton")
-        self.verticalLayout_9.addWidget(self.betButton)
-        self.hitButton = QtWidgets.QPushButton(self.verticalLayoutWidget_7)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.hitButton.sizePolicy().hasHeightForWidth())
-        self.hitButton.setSizePolicy(sizePolicy)
+        self.hitButton = QtWidgets.QPushButton(self.playPage)
+        self.hitButton.setGeometry(QtCore.QRect(950, 670, 100, 30))
         self.hitButton.setObjectName("hitButton")
-        self.verticalLayout_9.addWidget(self.hitButton)
-        self.standButton = QtWidgets.QPushButton(self.verticalLayoutWidget_7)
-        sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.standButton.sizePolicy().hasHeightForWidth())
-        self.standButton.setSizePolicy(sizePolicy)
+        self.standButton = QtWidgets.QPushButton(self.playPage)
+        self.standButton.setGeometry(QtCore.QRect(1100, 670, 100, 30))
         self.standButton.setObjectName("standButton")
-        self.verticalLayout_9.addWidget(self.standButton)
-        self.verticalLayoutWidget_8 = QtWidgets.QWidget(self.playPage)
-        self.verticalLayoutWidget_8.setGeometry(QtCore.QRect(880, 0, 361, 561))
-        self.verticalLayoutWidget_8.setObjectName("verticalLayoutWidget_8")
-        self.verticalLayout_10 = QtWidgets.QVBoxLayout(self.verticalLayoutWidget_8)
-        self.verticalLayout_10.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout_10.setObjectName("verticalLayout_10")
-        self.gridLayout_1 = QtWidgets.QGridLayout()
-        self.gridLayout_1.setObjectName("gridLayout_1")
-        self.ponitsLabel_1 = QtWidgets.QLabel(self.verticalLayoutWidget_8)
-        self.ponitsLabel_1.setObjectName("ponitsLabel_1")
-        self.gridLayout_1.addWidget(self.ponitsLabel_1, 1, 1, 1, 1)
-        self.usernameLabel_1 = QtWidgets.QLabel(self.verticalLayoutWidget_8)
-        self.usernameLabel_1.setObjectName("usernameLabel_1")
-        self.gridLayout_1.addWidget(self.usernameLabel_1, 0, 0, 1, 1)
-        self.moenyLabel_1 = QtWidgets.QLabel(self.verticalLayoutWidget_8)
-        self.moenyLabel_1.setObjectName("moenyLabel_1")
-        self.gridLayout_1.addWidget(self.moenyLabel_1, 0, 1, 1, 1)
-        self.actionLabel_1 = QtWidgets.QLabel(self.verticalLayoutWidget_8)
-        self.actionLabel_1.setObjectName("actionLabel_1")
-        self.gridLayout_1.addWidget(self.actionLabel_1, 1, 0, 1, 1)
-        self.verticalLayout_10.addLayout(self.gridLayout_1)
-        self.gridLayout_2 = QtWidgets.QGridLayout()
-        self.gridLayout_2.setObjectName("gridLayout_2")
-        self.usernameLabel_2 = QtWidgets.QLabel(self.verticalLayoutWidget_8)
-        self.usernameLabel_2.setObjectName("usernameLabel_2")
-        self.gridLayout_2.addWidget(self.usernameLabel_2, 0, 0, 1, 1)
-        self.moenyLabel_2 = QtWidgets.QLabel(self.verticalLayoutWidget_8)
-        self.moenyLabel_2.setObjectName("moenyLabel_2")
-        self.gridLayout_2.addWidget(self.moenyLabel_2, 0, 1, 1, 1)
-        self.actionLabel_2 = QtWidgets.QLabel(self.verticalLayoutWidget_8)
-        self.actionLabel_2.setObjectName("actionLabel_2")
-        self.gridLayout_2.addWidget(self.actionLabel_2, 1, 0, 1, 1)
-        self.ponitsLabel_2 = QtWidgets.QLabel(self.verticalLayoutWidget_8)
-        self.ponitsLabel_2.setObjectName("ponitsLabel_2")
-        self.gridLayout_2.addWidget(self.ponitsLabel_2, 1, 1, 1, 1)
-        self.verticalLayout_10.addLayout(self.gridLayout_2)
-        self.gridLayout_3 = QtWidgets.QGridLayout()
-        self.gridLayout_3.setObjectName("gridLayout_3")
-        self.usernameLabel_3 = QtWidgets.QLabel(self.verticalLayoutWidget_8)
-        self.usernameLabel_3.setObjectName("usernameLabel_3")
-        self.gridLayout_3.addWidget(self.usernameLabel_3, 0, 0, 1, 1)
-        self.moenyLabel_3 = QtWidgets.QLabel(self.verticalLayoutWidget_8)
-        self.moenyLabel_3.setObjectName("moenyLabel_3")
-        self.gridLayout_3.addWidget(self.moenyLabel_3, 0, 1, 1, 1)
-        self.actionLabel_3 = QtWidgets.QLabel(self.verticalLayoutWidget_8)
-        self.actionLabel_3.setObjectName("actionLabel_3")
-        self.gridLayout_3.addWidget(self.actionLabel_3, 1, 0, 1, 1)
-        self.ponitsLabel_3 = QtWidgets.QLabel(self.verticalLayoutWidget_8)
-        self.ponitsLabel_3.setObjectName("ponitsLabel_3")
-        self.gridLayout_3.addWidget(self.ponitsLabel_3, 1, 1, 1, 1)
-        self.verticalLayout_10.addLayout(self.gridLayout_3)
-        self.gridLayout_4 = QtWidgets.QGridLayout()
-        self.gridLayout_4.setObjectName("gridLayout_4")
-        self.usernameLabel_4 = QtWidgets.QLabel(self.verticalLayoutWidget_8)
-        self.usernameLabel_4.setObjectName("usernameLabel_4")
-        self.gridLayout_4.addWidget(self.usernameLabel_4, 0, 0, 1, 1)
-        self.moenyLabel_4 = QtWidgets.QLabel(self.verticalLayoutWidget_8)
-        self.moenyLabel_4.setObjectName("moenyLabel_4")
-        self.gridLayout_4.addWidget(self.moenyLabel_4, 0, 1, 1, 1)
-        self.actionLabel_4 = QtWidgets.QLabel(self.verticalLayoutWidget_8)
-        self.actionLabel_4.setObjectName("actionLabel_4")
-        self.gridLayout_4.addWidget(self.actionLabel_4, 1, 0, 1, 1)
-        self.ponitsLabel_4 = QtWidgets.QLabel(self.verticalLayoutWidget_8)
-        self.ponitsLabel_4.setObjectName("ponitsLabel_4")
-        self.gridLayout_4.addWidget(self.ponitsLabel_4, 1, 1, 1, 1)
-        self.verticalLayout_10.addLayout(self.gridLayout_4)
-        self.gridLayout_5 = QtWidgets.QGridLayout()
-        self.gridLayout_5.setObjectName("gridLayout_5")
-        self.actionLabel_5 = QtWidgets.QLabel(self.verticalLayoutWidget_8)
-        self.actionLabel_5.setObjectName("actionLabel_5")
-        self.gridLayout_5.addWidget(self.actionLabel_5, 1, 0, 1, 1)
-        self.moenyLabel_5 = QtWidgets.QLabel(self.verticalLayoutWidget_8)
-        self.moenyLabel_5.setObjectName("moenyLabel_5")
-        self.gridLayout_5.addWidget(self.moenyLabel_5, 0, 1, 1, 1)
-        self.ponitsLabel_5 = QtWidgets.QLabel(self.verticalLayoutWidget_8)
-        self.ponitsLabel_5.setObjectName("ponitsLabel_5")
-        self.gridLayout_5.addWidget(self.ponitsLabel_5, 1, 1, 1, 1)
-        self.usernameLabel_5 = QtWidgets.QLabel(self.verticalLayoutWidget_8)
-        self.usernameLabel_5.setObjectName("usernameLabel_5")
-        self.gridLayout_5.addWidget(self.usernameLabel_5, 0, 0, 1, 1)
-        self.verticalLayout_10.addLayout(self.gridLayout_5)
         self.exitButton = QtWidgets.QPushButton(self.playPage)
-        self.exitButton.setGeometry(QtCore.QRect(10, 680, 51, 21))
+        self.exitButton.setGeometry(QtCore.QRect(10, 670, 100, 30))
         self.exitButton.setObjectName("exitButton")
         self.tableImageLabel = QtWidgets.QLabel(self.playPage)
-        self.tableImageLabel.setGeometry(QtCore.QRect(0, 0, 862, 662))
-        self.pixmapTable = QPixmap('images/others/table.jpg').scaled(862, 662)
+        self.tableImageLabel.setGeometry(QtCore.QRect(0, 0, 1240, 662))
+        self.pixmapTable = QPixmap('images/others/table.jpg').scaled(1240, 672)
         self.tableImageLabel.setPixmap(self.pixmapTable)
         self.deckImageLabel = QtWidgets.QLabel(self.playPage)
-        self.deckImageLabel.setGeometry(QtCore.QRect(391, 281, 80, 100))
+        self.deckImageLabel.setGeometry(QtCore.QRect(580, 281, 80, 100))
         self.pixmapDeck = QPixmap('images/others/talia2_main.png').scaled(80, 100)
         self.deckImageLabel.setPixmap(self.pixmapDeck)
         self.tableImageLabel.setText("")
         self.tableImageLabel.setObjectName("tableImageLabel")
+        self.tframe1 = QtWidgets.QFrame(self.playPage)
+        self.tframe2 = QtWidgets.QFrame(self.playPage)
+        self.tframe3 = QtWidgets.QFrame(self.playPage)
+        self.tframe4 = QtWidgets.QFrame(self.playPage)
+        self.tframe1.setObjectName("tframe1")
+        self.tframe2.setObjectName("tframe2")
+        self.tframe3.setObjectName("tframe3")
+        self.tframe4.setObjectName("tframe4")
+        self.tframe1.setGeometry(QtCore.QRect(1120, 20, 80, 40))
+        self.tframe2.setGeometry(QtCore.QRect(1120, 70, 80, 40))
+        self.tframe3.setGeometry(QtCore.QRect(1120, 120, 80, 40))
+        self.tframe4.setGeometry(QtCore.QRect(1120, 170, 80, 40))
+        self.tframe1.setStyleSheet("#tframe1 {border: 5px solid #FEFE58; background-color: #CFABDB;} QLabel { font-size: 15px;color: #FEFE58; background-color: #CFABDB; font-weight: bold}") #wait
+        self.tframe2.setStyleSheet("#tframe2 {border: 5px solid #78C1FF; background-color: #CFABDB;} QLabel { font-size: 15px;color: #FEFE58; background-color: #CFABDB; font-weight: bold}") #turn
+        self.tframe3.setStyleSheet("#tframe3 {border: 5px solid #010508; background-color: #CFABDB;} QLabel { font-size: 15px;color: #FEFE58; background-color: #CFABDB; font-weight: bold}") #lost
+        self.tframe4.setStyleSheet("#tframe4 {border: 5px solid #D70000; background-color: #CFABDB;} QLabel { font-size: 15px;color: #FEFE58; background-color: #CFABDB; font-weight: bold}")  # lost
+        self.tframe1Label = QtWidgets.QLabel(self.tframe1)
+        self.tframe2Label = QtWidgets.QLabel(self.tframe2)
+        self.tframe3Label = QtWidgets.QLabel(self.tframe3)
+        self.tframe4Label = QtWidgets.QLabel(self.tframe4)
+        self.vbox1t = QtWidgets.QVBoxLayout()
+        self.vbox2t = QtWidgets.QVBoxLayout()
+        self.vbox3t = QtWidgets.QVBoxLayout()
+        self.vbox4t = QtWidgets.QVBoxLayout()
+        self.vbox1t.setAlignment(Qt.AlignCenter)
+        self.vbox2t.setAlignment(Qt.AlignCenter)
+        self.vbox3t.setAlignment(Qt.AlignCenter)
+        self.vbox4t.setAlignment(Qt.AlignCenter)
+        self.vbox1t.addWidget(self.tframe1Label)
+        self.vbox2t.addWidget(self.tframe2Label)
+        self.vbox3t.addWidget(self.tframe3Label)
+        self.vbox4t.addWidget(self.tframe4Label)
+        self.tframe1.setLayout(self.vbox1t)
+        self.tframe2.setLayout(self.vbox2t)
+        self.tframe3.setLayout(self.vbox3t)
+        self.tframe4.setLayout(self.vbox4t)
+        self.tframe1Label.setText("WAIT")
+        self.tframe2Label.setText("TURN")
+        self.tframe3Label.setText("LOST")
+        self.tframe4Label.setText("WIN")
+        self.replayButton = QtWidgets.QPushButton(self.playPage)
+        self.replayButton.setGeometry(QtCore.QRect(110, 670, 100, 30))
+        self.replayButton.setObjectName("replayButton")
+        self.replayButton.setText("REPLAY")
         self.stackedWidget.addWidget(self.playPage)
 
         # RANKING PAGE
@@ -544,6 +485,9 @@ class Ui_MainWindow(object):
         self.rankingList.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
         self.rankingList.setGeometry(QtCore.QRect(40, 50, 1161, 621))
         self.rankingList.setObjectName("rankingList")
+        self.rankingList.setFocusPolicy(Qt.NoFocus)
+        self.rankingList.setStyleSheet("QTableView {selection-color: black ;selection-background-color: #FFC30B; font-size: 13px;color: #FEFE58;}"
+                                       "QHeaderView::section {color:white; background-color:#232326;}")
         self.label_4 = QtWidgets.QLabel(self.rankingPage)
         self.label_4.setGeometry(QtCore.QRect(570, 10, 101, 21))
         self.label_4.setFont(font)
@@ -581,6 +525,8 @@ class Ui_MainWindow(object):
         self.adminList.setSelectionBehavior(QtWidgets.QTableView.SelectRows)
         self.adminList.setSelectionMode(QtWidgets.QTableView.SingleSelection)
         self.adminList.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.Stretch)
+        self.adminList.setStyleSheet("QTableView {selection-color: black ;selection-background-color: #FFC30B; font-size: 13px;color: #FEFE58;}"
+            "QHeaderView::section {color:white; background-color:#232326;}")
         self.label_6 = QtWidgets.QLabel(self.adminPage)
         self.label_6.setGeometry(QtCore.QRect(540, 0, 151, 51))
         self.label_6.setFont(font)
@@ -720,7 +666,8 @@ class Ui_MainWindow(object):
         self.statAvatar.setGeometry(QtCore.QRect(1039, 50, 100, 100))
         self.statAbout = QtWidgets.QLabel(self.statisticsPage)
         self.statAbout.setGeometry(QtCore.QRect(939, 200, 300, 400))
-        self.statAbout.setStyleSheet("QLabel { font-size: 13px;color: #FEFE58; font-weight: bold;border: 2px solid gray;border-radius: 10px;}")
+        self.statAbout.setStyleSheet(
+            "QLabel { font-size: 13px;color: #FEFE58; font-weight: bold;border: 2px solid gray;border-radius: 10px;}")
         self.statAbout.setAlignment(Qt.AlignCenter)
         self.statAbout.setWordWrap(True)
         self.userStatLabel = QtWidgets.QLabel(self.statisticsPage)
@@ -733,6 +680,42 @@ class Ui_MainWindow(object):
         self.stackedWidget.addWidget(self.statisticsPage)
         self.horizontalLayout.addWidget(self.stackedWidget)
         MainWindow.setCentralWidget(self.centralwidget)
+
+        # TUTORIAL PAGE
+        self.tutorialPage = QtWidgets.QWidget()
+        self.tutorialPage.setObjectName("tutorialPage")
+        self.backToMenuButton_4 = QtWidgets.QPushButton(self.tutorialPage)
+        self.backToMenuButton_4.setGeometry(QtCore.QRect(10, 670, 75, 23))
+        self.backToMenuButton_4.setObjectName("backToMenuButton_4")
+        self.tutorial = QtWidgets.QLabel(self.tutorialPage)
+        self.tutorial.setText("Welcome in blackjack game ! (polish: oczko)\n"
+                              "\n\n USERS \n"
+                              "In the right panel you might see five places where you can login or create a new account to play this lovely game.\n"
+                              "If you login properly, you are allowed to change your account features like avatar, description or password. \n"
+                              "You may look to the ranking subpage (it sorts players according to the money) or even get \n"
+                              "to know with users statistics in much deeper way by clicking show statistics! \n"
+                              "In the right corner of the main panel, you can see admin button,\n"
+                              "where admin is allowed to manage players (ban or unban) and also to set new admins or degrade them.\n"
+                              "\n\n SETUP GAME \n"
+                              "If you click play button you will be redirected to the page with a few game options. \n"
+                              "You can choose your opponents or play with computer algorithm with specified level of intelligence (easy, medium, hard).\n"
+                              "You can also change number of decks, and layout of your cards. After selecting at least two players (max 5) you might begin your adventure and play blackjack !\n"
+                              "\n\n GAMEPLAY \n"
+                              "At the beginning initial phase of bet is happening, you receive specified amount of money to play with. \n"
+                              "Remember, it will be added or taken from your overall money amount at the end of the game (depending on the result).\n"
+                              "After that phase, game rules are pretty simple, you take the card with particular value and it is added to your result, \n"
+                              "you might pass or take another card but your goal\n"
+                              "is to get as close as possible to 21. If you go beyond that, you will lose.\n"
+                              "\n"
+                              "Good luck ! \n")
+        self.tutorial.setStyleSheet(
+            "QLabel { font-size: 15px;color: #FEFE58; font-weight: bold;border: 2px solid gray;border-radius: 10px;}")
+        self.tutorial.setAlignment(Qt.AlignCenter)
+        self.verticalLayout_7 = QtWidgets.QVBoxLayout(self.tutorialPage)
+        self.verticalLayout_7.addWidget(self.tutorial)
+        self.verticalLayout_7.setAlignment(Qt.AlignCenter)
+        self.tutorialPage.setLayout(self.verticalLayout_7)
+        self.stackedWidget.addWidget(self.tutorialPage)
 
         # START SETTINGS
         self.retranslateUi(MainWindow)
@@ -757,11 +740,16 @@ class Ui_MainWindow(object):
         self.skin1rb.setChecked(True)
 
         # BUTTONS FUNCTIONS
-        self.loginButton_1.clicked.connect(lambda: self.openLoginDialog(0, self.userSW_1, self.username_1, self.avatarKn_1))
-        self.loginButton_2.clicked.connect(lambda: self.openLoginDialog(1, self.userSW_2, self.username_2, self.avatarKn_2))
-        self.loginButton_3.clicked.connect(lambda: self.openLoginDialog(2, self.userSW_3, self.username_3, self.avatarKn_3))
-        self.loginButton_4.clicked.connect(lambda: self.openLoginDialog(3, self.userSW_4, self.username_4, self.avatarKn_4))
-        self.loginButton_5.clicked.connect(lambda: self.openLoginDialog(4, self.userSW_5, self.username_5, self.avatarKn_5))
+        self.loginButton_1.clicked.connect(
+            lambda: self.openLoginDialog(0, self.userSW_1, self.username_1, self.avatarKn_1))
+        self.loginButton_2.clicked.connect(
+            lambda: self.openLoginDialog(1, self.userSW_2, self.username_2, self.avatarKn_2))
+        self.loginButton_3.clicked.connect(
+            lambda: self.openLoginDialog(2, self.userSW_3, self.username_3, self.avatarKn_3))
+        self.loginButton_4.clicked.connect(
+            lambda: self.openLoginDialog(3, self.userSW_4, self.username_4, self.avatarKn_4))
+        self.loginButton_5.clicked.connect(
+            lambda: self.openLoginDialog(4, self.userSW_5, self.username_5, self.avatarKn_5))
 
         self.manageButton_1.clicked.connect(lambda: self.openManageDialog(self.loggedUsers[0], self.avatarKn_1))
         self.manageButton_2.clicked.connect(lambda: self.openManageDialog(self.loggedUsers[1], self.avatarKn_2))
@@ -779,6 +767,8 @@ class Ui_MainWindow(object):
         self.backToMenuButton_1.clicked.connect(lambda: self.stackedWidget.setCurrentWidget(self.mainMenuPage))
         self.backToMenuButton_2.clicked.connect(lambda: self.stackedWidget.setCurrentWidget(self.mainMenuPage))
         self.backToMenuButton_3.clicked.connect(lambda: self.stackedWidget.setCurrentWidget(self.mainMenuPage))
+        self.backToMenuButton_4.clicked.connect(lambda: self.stackedWidget.setCurrentWidget(self.mainMenuPage))
+        self.tutorialButton.clicked.connect(lambda: self.stackedWidget.setCurrentWidget(self.tutorialPage))
 
         self.playButton.clicked.connect(self.playButtonFunction)
         self.startGameButton.clicked.connect(self.startGameButtonFunction)
@@ -801,11 +791,17 @@ class Ui_MainWindow(object):
         # self.setUserTestButton.setText('TEST')
         # self.setUserTestButton.clicked.connect(self.testLoggedUsers)
         #
-        # self.addCardTestButton = QtWidgets.QPushButton(self.playPage)
-        # self.addCardTestButton.setGeometry(QtCore.QRect(300, 670, 75, 23))
-        # self.addCardTestButton.setObjectName("addCardTestButton")
-        # self.addCardTestButton.setText('add')
-        # self.addCardTestButton.clicked.connect(self.addCardTest)
+        self.addCardTestButton = QtWidgets.QPushButton(self.playPage)
+        self.addCardTestButton.setGeometry(QtCore.QRect(220, 670, 75, 23))
+        self.addCardTestButton.setObjectName("addCardTestButton")
+        self.addCardTestButton.setText('add')
+        self.addCardTestButton.clicked.connect(self.addCardTest)
+
+        self.removeCardTestButton = QtWidgets.QPushButton(self.playPage)
+        self.removeCardTestButton.setGeometry(QtCore.QRect(300, 670, 75, 23))
+        self.removeCardTestButton.setObjectName("removeCardTestButton")
+        self.removeCardTestButton.setText('remove')
+        self.removeCardTestButton.clicked.connect(self.removeCardTest)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -851,31 +847,12 @@ class Ui_MainWindow(object):
         self.betButton.setText(_translate("MainWindow", "BET"))
         self.hitButton.setText(_translate("MainWindow", "HIT"))
         self.standButton.setText(_translate("MainWindow", "STAND"))
-        self.ponitsLabel_1.setText(_translate("MainWindow", "Points1"))
-        self.usernameLabel_1.setText(_translate("MainWindow", "Username1"))
-        self.moenyLabel_1.setText(_translate("MainWindow", "Money1"))
-        self.actionLabel_1.setText(_translate("MainWindow", "Action1"))
-        self.usernameLabel_2.setText(_translate("MainWindow", "Username2"))
-        self.moenyLabel_2.setText(_translate("MainWindow", "Money2"))
-        self.actionLabel_2.setText(_translate("MainWindow", "Action2"))
-        self.ponitsLabel_2.setText(_translate("MainWindow", "Points2"))
-        self.usernameLabel_3.setText(_translate("MainWindow", "Username3"))
-        self.moenyLabel_3.setText(_translate("MainWindow", "Money3"))
-        self.actionLabel_3.setText(_translate("MainWindow", "Action3"))
-        self.ponitsLabel_3.setText(_translate("MainWindow", "Points3"))
-        self.usernameLabel_4.setText(_translate("MainWindow", "Username4"))
-        self.moenyLabel_4.setText(_translate("MainWindow", "Money4"))
-        self.actionLabel_4.setText(_translate("MainWindow", "Action4"))
-        self.ponitsLabel_4.setText(_translate("MainWindow", "Points4"))
-        self.actionLabel_5.setText(_translate("MainWindow", "Action5"))
-        self.moenyLabel_5.setText(_translate("MainWindow", "Money5"))
-        self.ponitsLabel_5.setText(_translate("MainWindow", "Points5"))
-        self.usernameLabel_5.setText(_translate("MainWindow", "Username5"))
         self.exitButton.setText(_translate("MainWindow", "EXIT"))
         self.label_4.setText(_translate("MainWindow", "RANKING"))
         self.backToMenuButton_2.setText(_translate("MainWindow", "BACK"))
         self.statButton.setText(_translate("MainWindow", "SHOW STATISTICS"))
         self.backToMenuButton_3.setText(_translate("MainWindow", "BACK"))
+        self.backToMenuButton_4.setText(_translate("MainWindow", "BACK"))
         self.banButton.setText(_translate("MainWindow", "BAN"))
         self.unbanButton.setText(_translate("MainWindow", "UNBAN"))
         self.setUserButton.setText(_translate("MainWindow", "SET USER"))
@@ -925,7 +902,10 @@ class Ui_MainWindow(object):
         self.backToRankButton.setText(_translate("MainWindow", "BACK"))
 
     def timeSliderFunction(self, value):
-        self.timeSecondsLabel.setText(str(value)+' s')
+        self.timeSecondsLabel.setText(str(value) + ' s')
+
+    def betSliderFunction(self, value):
+        self.betLabel.setText(str(value) + ' $')
 
     def openLoginDialog(self, index, stWid, username, avatar):
         self.LoginDialog = QtWidgets.QDialog()
@@ -947,7 +927,9 @@ class Ui_MainWindow(object):
 
     def adminButtonFunction(self):
         db = blackjack.DataBase()
-        if(blackjack.DataBase.checkIfAdminPresent(db,self.loggedUsers[0].username,self.loggedUsers[1].username,self.loggedUsers[2].username,self.loggedUsers[3].username,self.loggedUsers[4].username)):
+        if (blackjack.DataBase.checkIfAdminPresent(db, self.loggedUsers[0].username, self.loggedUsers[1].username,
+                                                   self.loggedUsers[2].username, self.loggedUsers[3].username,
+                                                   self.loggedUsers[4].username)):
             self.loadAdminList(0)
             self.stackedWidget.setCurrentWidget(self.adminPage)
             print("Admin page")
@@ -1041,8 +1023,21 @@ class Ui_MainWindow(object):
             print(game_start_data, skin)
 
             print(users2)
-            self.hands = UserHands(users2, skin, self.playPage)                  #   rysowanie
-
+            self.hands = UserHands(users2, skin, self.playPage)  # rysowanie
+            # TODO
+            # game_start_data daje startowe dane do rozpoczecia gry
+            # do przekazania do funkcji gry sa nastepujace obiekty:
+            # 1.    self.hands - zbior wszystkich rak + opisy, to sa te cale prostokaty
+            #       iterujac po liscie w tym obiekcie self.hands.hands[i] mozesz uzywac roznych funkcji
+            #       self.hands.hands[i].addCard('2karo') dodaje karte do uzytkownika o tym indeksie, iteruje sie od gory zgodnie z ruchem wskazowek
+            #       self.hands.removeCards() powinno usunac wszystkie karty z rak, do uzycia po zakonczonej rundzie
+            #       self.hands.hands[i].changeBorderColour('akcja') zmienia kolor obramowki, jesli 'loss' to czarno, jesli 'turn' niebiesko, 'wait' zolto, 'win' czerwono
+            #       czyli jak przegral, jego kolej, czeka na swoja ture, wygrany/remis na koncu
+            # 2. przyciski: self.betButton, self.hitButton, self.standButton
+            #       potem mozesz do nich clicked.connect(funkcja) zrobic do wylapywania ruchow
+            # 3. self.replayButton po zakonczonej grze niech sie pojawi show(), a przed giera hide() i tutaj bedzie potrzebne zapisywanie ruchow, najlepeij jakas lista w stylu:
+            #    [['uzyta funkcja do rysowania','index','karta-opcjonalnie'],[],[]] , przynajmniej cos takiego sobie wyobrazam, ze najlatwiej bedzie
+            # 4. self.exitButton jak wcisnie to powinno przejsc do setupPage i giere wylaczyc czy cos, nwm
             self.stackedWidget.setCurrentWidget(self.playPage)
             print('start game')
         else:
@@ -1072,30 +1067,23 @@ class Ui_MainWindow(object):
         self.rankingList.setModel(self.rankingListModel)
         self.rankingList.selectRow(0)
         self.stackedWidget.setCurrentWidget(self.rankingPage)
-        self.rankingList.setStyleSheet("selection-color: black ;selection-background-color: #FFC30B;")
         print('show actual ranking, by money')
 
     def statButtonFunction(self):
         username = self.rankingList.selectionModel().currentIndex().siblingAtColumn(0).data()
 
-        # TODO
-        # username zwraca nazwe wybranego z listy uzytkownika
-        # wykonac zapytanie do bazy o statystyki tego usera
-        # i na ich podstawie pozmieniac Labele wedlug wzoru
-        # self.st_1.setText()      st_1 ... st_20 statystyki odpowiednio ponumerowane po kolei
-        # oprocz tego mysle, ze bedzie jeszcze zapytanie o opis i avatar, gdzies bedzie jeszcze na to miejsce, ale jeszcze nie teraz
-
         playerStat = db.getPlayerStatistics(username)
 
         self.st_1.setText(str(playerStat["HandsPlayed"]))
         self.st_2.setText(str(playerStat["WonHands"]))
-        self.st_3.setText(str(round(playerStat["WinRatio"],2)))
-        self.st_6.setText(str(round(playerStat["AverageTimeToMove"],2)))
+        self.st_3.setText(str(round(playerStat["WinRatio"], 2)))
+        self.st_6.setText(str(round(playerStat["AverageTimeToMove"], 2)))
         self.st_7.setText(str(playerStat["MostPickedCard"]))
         self.st_5.setText(str(playerStat["CardsGotten"]))
 
         player = db.getPlayer(username)
-        self.st_4.setText(str(round(blackjack.DataBase.getProperStatToAvoidZeroDivision(db,playerStat["CardsGotten"],playerStat["HandsPlayed"]),2)))
+        self.st_4.setText(str(round(blackjack.DataBase.getProperStatToAvoidZeroDivision(db, playerStat["CardsGotten"],
+                                                                                        playerStat["HandsPlayed"]), 2)))
 
         cardStat = db.getCardStatistics(username)
         self.st_8.setText(str(cardStat["2"]))
@@ -1112,7 +1100,6 @@ class Ui_MainWindow(object):
         self.st_19.setText(str(cardStat["K"]))
         self.st_20.setText(str(cardStat["A"]))
 
-
         pixmap = QPixmap('images/avatars/' + str(player["avatar"])).scaled(100, 100)
         self.statAvatar.setPixmap(pixmap)
         self.statAbout.setText(str(player["description"]))
@@ -1128,11 +1115,12 @@ class Ui_MainWindow(object):
             print(i, self.loggedUsers[i].username, self.loggedUsers[i].avatar, self.loggedUsers[i].isAdmin)
 
     def addCardTest(self):
-        print('add card')
-        print(self.hands)
-        print(self.hands.hands[0])
-        self.hands.hands[0].addCard('2karo')
+        #print('add card')
+        for i in range(len(self.hands.hands)):
+            self.hands.hands[i].addCard('2karo')
 
+    def removeCardTest(self):
+        self.hands.removeCards()
 
 
 class LoggedUser(object):
@@ -1190,57 +1178,129 @@ class UserHands(QtWidgets.QWidget):
         super(UserHands, self).__init__(parent)
         self.hands = []
         for i in range(len(players)):
-            hand = UserHand(math.pi * 2 / len(players), i, players[i], skin, self)
-            hand.addCard('2karo')
+            hand = UserHand(math.pi * 2 / len(players), i, players[i], skin, parent, self)
+            # hand.addCard('2karo')
             self.hands.append(hand)
 
+    def removeCards(self):
+        for i in range(len(self.hands)):
+            self.hands[i].removeCards()
+            # TODO nwm tu po usunieciu kart to niech zresetuje wszystko na startowe
+            self.hands[i].bet.setText('Bet $')
+            self.hands[i].points.setText('Points')
+            self.hands[i].money.setText('Money $')
+            self.hands[i].action.setText('Action')
+            self.hands[i].changeBorderColour('wait')
 
-class UserHand(QtWidgets.QWidget):
-    def __init__(self, angle, index, user, skin, parent=None):
+
+class UserHand(QtWidgets.QFrame):
+    def __init__(self, angle, index, user, skin, animParent, parent=None):
         super(UserHand, self).__init__(parent)
-        self.setStyleSheet("background: ")                                      #zeby przeswitywalo
-        r = 250                                                                 #ustawianie miejsca
-        x = math.floor(-r * math.cos(math.pi/2 + angle * index) + 431)
-        y = math.floor(-r * math.sin(math.pi/2 + angle * index) + 331)
-        print('x ', x, ', y ', y)
-        self.setGeometry(QtCore.QRect(x - 150, y - 80, 300, 160))               # x,y  862 662 tyle ma obraz stolu
-        self.vBox = QtWidgets.QVBoxLayout(self)
+        self.setObjectName("myframe")
+        self.setStyleSheet(
+            "#myframe {border: 5px solid #FEFE58} QFrame {background-color: #CFABDB; font-size: 12px;color: #FEFE58; font-weight: bold;}")
+        r = 240  # ustawianie miejsca
+        a = 300
+        b = 500
+        # TODO nwm spolrzedne biegunowe/eliptyczne, przy 5 troche za ciasno wyglada
+        self.x = math.floor(-r * math.cos(math.pi / 2 + angle * index) + 620)
+        self.y = math.floor(-r * math.sin(math.pi / 2 + angle * index) + 327)
+        print('x ', self.x, ', y ', self.y)
+        self.setGeometry(QtCore.QRect(self.x - 150, self.y - 80, 300, 170))  # x,y  1240, 672 tyle ma obraz stolu
+        self.vBox = QtWidgets.QVBoxLayout(self)  # main vbox
         self.vBox.setAlignment(Qt.AlignCenter)
-        self.hBox = QtWidgets.QHBoxLayout()
+        self.hBox = QtWidgets.QHBoxLayout()  # holds cards
+        self.hBox.setSpacing(1)
+        self.hBox.setGeometry(QtCore.QRect(0, 0, 300, 100))
         self.hBox.setAlignment(Qt.AlignCenter)
-        self.hBox2 = QtWidgets.QHBoxLayout()
+        self.hBox2 = QtWidgets.QHBoxLayout()  # holds user info
         self.hBox2.setAlignment(Qt.AlignCenter)
+        self.hBox2.setSpacing(10)
         self.vBox.addLayout(self.hBox)
         self.vBox.addLayout(self.hBox2)
+        self.vBox.setSpacing(1)
+        self.money = QtWidgets.QLabel()
+        self.money.setText('Money $')
+        self.hBox2.addWidget(self.money)
         self.avatar = QtWidgets.QLabel()
-        self.avatar.setAlignment(Qt.AlignCenter)
-        self.hBox2.addWidget(self.avatar)
-        self.pixmapAvatar = QPixmap('images/avatars/'+user[1]).scaled(41,41)
-        self.vBox2 = QtWidgets.QVBoxLayout()
-        self.hBox2.addLayout(self.vBox2)
+        self.pixmapAvatar = QPixmap('images/avatars/' + user[1]).scaled(41, 41)
         self.avatar.setPixmap(self.pixmapAvatar)
+        self.hBox2.addWidget(self.avatar)
+        self.vBox2 = QtWidgets.QVBoxLayout()
         self.username = QtWidgets.QLabel()
         self.username.setText(user[0])
         self.points = QtWidgets.QLabel()
         self.points.setText("Points")
         self.vBox2.addWidget(self.username)
         self.vBox2.addWidget(self.points)
+        self.hBox2.addLayout(self.vBox2)
+        self.vBox3 = QtWidgets.QVBoxLayout()
+        self.action = QtWidgets.QLabel()
+        self.action.setText('Action')
+        self.bet = QtWidgets.QLabel()
+        self.bet.setText('Bet $')
+        self.vBox3.addWidget(self.action)
+        self.vBox3.addWidget(self.bet)
+        self.hBox2.addLayout(self.vBox3)
         self.skin = skin
+        self.animParent = animParent
 
-    def addCard(self, cardname):                    #tutaj jakas animacje pewnie
+    def addCard(self, cardname):  # tutaj jakas animacje pewnie
         self.card = QtWidgets.QLabel()
-        self.pixmapCard = QPixmap('images/cards/'+self.skin+'/'+cardname+'.png').scaled(80, 100)
+        self.pixmapCard = QPixmap('images/cards/' + self.skin + '/' + cardname + '.png').scaled(80, 100)
         self.card.setPixmap(self.pixmapCard)
+        self.card.hide()
         self.hBox.addWidget(self.card)
+        #print('pos in hbox ', self.card.pos())
 
-    def removeCards(self):                          #tak to chyba usuwa
+        cardTemp = AnimatedCard(self.skin, self.card, self.animParent)  # to dziala
+        cardTemp.animate(cardname, self.x - 40, self.y - 70)
+
+    def removeCards(self):
         while self.hBox.count():
             child = self.hBox.takeAt(0)
             if child.widget():
                 child.widget().deleteLater()
+                #print("delete")
 
     def setPoints(self, points):
         self.points.setText(str(points))
+
+    def changeBorderColour(self, action):
+        if action == 'turn':
+            colour = '78C1FF'
+        elif action == 'lost':
+            colour = '010508'
+        elif action == 'wait':
+            colour = 'FEFE58'
+        elif action == 'win':
+            colour = 'D70000'
+        self.setStyleSheet(
+            "#myframe {border: 5px solid #" + colour + "} QFrame {background-color: #CFABDB; font-size: 12px;color: "
+                                                       "#FEFE58; font-weight: bold;}")
+
+
+class AnimatedCard(QtWidgets.QLabel):
+    def __init__(self, skin, card, parent=None):
+        super(AnimatedCard, self).__init__(parent)
+        self.skin = skin
+        self.card = card
+        self.anim = QPropertyAnimation(self, b"pos")
+        self.anim.setStartValue(QPoint(580, 281))
+        self.anim.setDuration(1000)
+        self.anim.finished.connect(self.animationEnd)
+
+    def animate(self, cardname, x, y):
+        self.pixmapCard = QPixmap('images/cards/' + self.skin + '/' + cardname + '.png').scaled(80, 100)
+        self.anim.setEndValue(QPoint(x, y))
+        self.setPixmap(self.pixmapCard)
+        self.show()
+        self.card.hide()
+        self.anim.start()
+
+    def animationEnd(self):
+        self.card.show()
+        self.deleteLater()
 
 
 class ComboBoxUsers(QtWidgets.QWidget):
@@ -1310,8 +1370,8 @@ class ComboBox(QtWidgets.QComboBox):
             if el not in self.dataInUse and el not in self.dataLeft:
                 self.dataLeft.append(el)
 
-        print('InUse ', self.dataInUse)
-        print('Left ', self.dataLeft)
+        # print('InUse ', self.dataInUse)
+        # print('Left ', self.dataLeft)
         self.clear()
 
         lista = ['None'] + self.dataLeft + ['AI(easy)', 'AI(medium)', 'AI(hard)']
@@ -1321,12 +1381,12 @@ class ComboBox(QtWidgets.QComboBox):
             lista.insert(0, self.tempTxt)
         self.addItems(lista)
         self.setCurrentText(self.tempTxt)
-        print('curr ', self.currentText())
+        #print('curr ', self.currentText())
         super(ComboBox, self).showPopup()
 
     def updateMe(self):
-        print('poprz ', self.tempTxt)
-        print('wybralem ', self.currentText())
+        # print('poprz ', self.tempTxt)
+        # print('wybralem ', self.currentText())
         if self.tempTxt in self.dataInUse:
             self.dataInUse.remove(self.tempTxt)
             self.dataLeft.append(self.tempTxt)
@@ -1334,12 +1394,13 @@ class ComboBox(QtWidgets.QComboBox):
             self.dataLeft.remove(self.currentText())
             self.dataInUse.append(self.currentText())
         self.tempTxt = self.currentText()
-        print('InUse 2 ', self.dataInUse)
-        print('Left 2 ', self.dataLeft)
+        # print('InUse 2 ', self.dataInUse)
+        # print('Left 2 ', self.dataLeft)
 
 
 if __name__ == "__main__":
     import sys
+
     db = blackjack.DataBase()
     print(blackjack.testPlayers())
     app = QtWidgets.QApplication(sys.argv)
