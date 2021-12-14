@@ -5,6 +5,13 @@ If some extensions are missing please type:
 ```
 pip install -r requirements.txt
 ```
+## Media sources
+
+Avatars and playing cards were taken from:
+
+- https://game-icons.net/
+- https://commons.wikimedia.org/wiki/Main_Page
+
 # Project description :hearts: :clubs: :diamonds: :spades:
 
 This project is about a popular card game blackjack- *in polish oczko*. It was made with Python3 with the use of Qt which is tool for designing and building graphical user interfaces (GUIs) with Qt Widgets. There is also not too big database based on SQLite.  
