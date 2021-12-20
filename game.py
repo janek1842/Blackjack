@@ -157,8 +157,7 @@ for i in range(number_of_players):
                     left_over[i] = players[i].points
                     bjs[i] = players[i].check_blackjack(twentyone)
                     break
-
-    elif type[i] == "m":
+    elif type[i] == "h":
         print(' ****************** PLAYER - %s ****************' % players[i].name)
         # start session
         print('player is picking two cards...')
@@ -178,12 +177,17 @@ for i in range(number_of_players):
             while True:
                 # stop betting ?
                 print('do you want to hit ? (y / n)')
-                if players[i].points < 18:
+                if players[i].points < 20:
                     hit_stand = "y"
                     print('y')
                     print('player is picking a new card...')
                     card_box, card_cnt, shuffle_point = card_inc(card_box, 1, card_cnt, shuffle_point, numer_of_decks)
-                    players[i].hit(card_box)
+                    number_of_points = 21 - players[i].points
+                    if number_of_points > 9:
+                        number_of_points = np.int64(np.floor(number_of_points/2))
+                        players[i].hit_hard(card_box, number_of_points)
+                    else:
+                        players[i].hit_hard(card_box, number_of_points)
                     if players[i].points >= twentyone:
                         left_over[i] = players[i].points
                         bjs[i] = players[i].check_blackjack(twentyone)
@@ -193,7 +197,6 @@ for i in range(number_of_players):
                     bjs[i] = players[i].check_blackjack(twentyone)
                     left_over[i] = players[i].points
                     break
-
     else:
         print(' ****************** PLAYER - %s ****************' % players[i].name)
         # start session

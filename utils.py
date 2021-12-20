@@ -18,6 +18,27 @@ def pick_a_card(cards, remove = True, manual = False):
                 del cards[suit_pick]
         return suit_pick + '_' + card_pick
 
+def pick_a_card_hard(cards, number_of_points, remove=True, manual=False):
+    if manual:
+        return input('name a card to pick:')
+    else:
+        suit_pick = list(cards.keys())[np.random.randint(0, 100) % len(cards)]
+        card_pick = cards[suit_pick][np.random.randint(0, 100) % len(cards[suit_pick])]
+        keys = list(cards.keys())
+        values = list(cards.values())
+        for i in range(len(keys)):
+            for k in range(len(values)):
+                for l in range(len(values[k])):
+                    if values[k][l] == str(number_of_points):
+                        suit_pick = keys[i]
+                        card_pick = cards[suit_pick][l]
+                        break
+        if remove:
+            del cards[suit_pick][cards[suit_pick].index(card_pick)]
+            if len(cards[suit_pick]) == 0:
+                del cards[suit_pick]
+        return suit_pick + '_' + card_pick
+
 # blackjack
 def calc_points(cards, base_val = 21):
     card_values = {'A' : 11, 'J' : 10, 'Q' : 10, 'K' : 10, '2' : 2, '3' : 3, '4' : 4, '5' : 5, '6' : 6, '7' : 7, '8' : 8, '9' : 9, '10' : 10}
@@ -93,6 +114,11 @@ class Player:
     
     def hit(self, card_box):
         self.cards += [pick_a_card(card_box, True)]
+        self.points = calc_points(self.cards)
+        self.show_state()
+
+    def hit_hard(self, card_box, number_of_points):
+        self.cards += [pick_a_card_hard(card_box,number_of_points, True)]
         self.points = calc_points(self.cards)
         self.show_state()
     
