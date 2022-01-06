@@ -32,6 +32,7 @@ class Ui_LoginDialog(object):
         LoginDialog.setSizePolicy(sizePolicy)
         LoginDialog.setMinimumSize(QtCore.QSize(481, 210))
         LoginDialog.setMaximumSize(QtCore.QSize(481, 210))
+        self.LoginDialog = LoginDialog
         self.stackedWidget = QtWidgets.QStackedWidget(LoginDialog)
         self.stackedWidget.setGeometry(QtCore.QRect(0, 0, 481, 211))
         self.stackedWidget.setAutoFillBackground(False)
@@ -229,10 +230,8 @@ class Ui_LoginDialog(object):
             self.users[self.index].avatar = user[1]
             self.users[self.index].isAdmin = user[2]
 
-            #LoginDialog.closeEvent(self)
-            #LoginDialog.close()            #TODO zamykanie, nie dziala :(
-            #LoginDialog.done(2)
-            #LoginDialog.accept()
+            self.LoginDialog.close()
+
         elif(banFlag):
             msg = QtWidgets.QMessageBox()
             msg.setWindowTitle("ERROR")
@@ -281,6 +280,9 @@ class Ui_LoginDialog(object):
                 blackjack.testPlayers()
                 mainResult = True
                 print("Pomyślnie dodano uzytkownika")
+                self.loginInput_2.setText("")
+                self.password1Input.setText("")
+                self.password2Input.setText("")
                 self.errorLabel2.setStyleSheet("color: #b1f900")
                 self.errorLabel2.setText("Succesfully created")
             return mainResult
