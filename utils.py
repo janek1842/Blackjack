@@ -1,4 +1,5 @@
 import time
+import itertools
 import numpy as np
 
 
@@ -27,12 +28,15 @@ def pick_a_card_hard(cards, number_of_points, remove=True, manual=False):
         keys = list(cards.keys())
         values = list(cards.values())
         for i in range(len(keys)):
-            for k in range(len(values)):
-                for l in range(len(values[k])):
-                    if values[k][l] == str(number_of_points):
-                        suit_pick = keys[i]
-                        card_pick = cards[suit_pick][l]
-                        break
+            for l in range(len(values[i])):
+                if values[i][l] == str(number_of_points):
+                    suit_pick = keys[i]
+                    card_pick = cards[suit_pick][l]
+                    break
+            else:
+                continue
+            break
+
         if remove:
             del cards[suit_pick][cards[suit_pick].index(card_pick)]
             if len(cards[suit_pick]) == 0:
@@ -91,7 +95,12 @@ class Player:
         else:
             self.bet = self.money
             self.money -= self.bet
-    
+
+    def set_bet_player(self, number):
+        self.bet = number
+        self.money -= self.bet
+        print(self.bet)
+
     def show_state(self):
         print('your cards : ', self.cards, '\t\t total points : ', self.points)
 
@@ -117,8 +126,14 @@ class Player:
         self.points = calc_points(self.cards)
         self.show_state()
 
+    def last_card(self):
+        return self.cards[len(self.cards)-1]
+
+    def last_card1(self):
+        return self.cards[len(self.cards)-2]
+
     def hit_hard(self, card_box, number_of_points):
-        self.cards += [pick_a_card_hard(card_box,number_of_points, True)]
+        self.cards += [pick_a_card_hard(card_box, number_of_points, True)]
         self.points = calc_points(self.cards)
         self.show_state()
     

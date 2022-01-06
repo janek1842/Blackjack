@@ -9,14 +9,19 @@
 import time
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-from PyQt5.QtCore import Qt, QPropertyAnimation, QPoint
+from PyQt5.QtCore import Qt, QPropertyAnimation, QPoint, QTimer, pyqtSlot
 from PyQt5.QtGui import QPixmap
+from PyQt5 import QtTest
+from PyQt5.QtWidgets import QApplication
 
 import blackjack
 from login import Ui_LoginDialog
 from manage2 import Ui_Dialog
 import threading
 import math
+from numpy import random
+import blackjack
+from utils import *
 
 
 class Ui_MainWindow(object):
@@ -352,7 +357,7 @@ class Ui_MainWindow(object):
         self.skin1rb.setStyleSheet("QRadioButton::indicator {"
                                    "width: 91px;"
                                    "height: 128px;"
-                                   "image: url(images/cards/set1/Aserce)}"
+                                   "image: url(images/cards/set1/heart_A)}"
                                    "QRadioButton::indicator::checked {"
                                    "width: 81px;"
                                    "height: 118px;"
@@ -364,7 +369,7 @@ class Ui_MainWindow(object):
         self.skin2rb.setStyleSheet("QRadioButton::indicator {"
                                    "width: 91px;"
                                    "height: 128px;"
-                                   "image: url(images/cards/set2/Aserce)}"
+                                   "image: url(images/cards/set2/heart_A)}"
                                    "QRadioButton::indicator::checked {"
                                    "width: 81px;"
                                    "height: 118px;"
@@ -404,9 +409,9 @@ class Ui_MainWindow(object):
         self.betSlider.setGeometry(QtCore.QRect(500, 670, 150, 21))
         self.betSlider.setOrientation(QtCore.Qt.Horizontal)
         self.betSlider.setObjectName("betSlider")
-        self.betSlider.setRange(10, 100)
+        self.betSlider.setRange(10, 500)
         self.betSlider.valueChanged.connect(self.betSliderFunction)
-        self.betSlider.setValue(50)
+        self.betSlider.setValue(500)
         self.betButton = QtWidgets.QPushButton(self.playPage)
         self.betButton.setGeometry(QtCore.QRect(800, 670, 100, 30))
         self.betButton.setObjectName("betButton")
@@ -775,9 +780,9 @@ class Ui_MainWindow(object):
         self.exitButton.clicked.connect(self.exitButtonFunction)
         self.rankButton.clicked.connect(self.rankButtonFunction)
         self.adminPanelButton.clicked.connect(self.adminButtonFunction)
-        self.betButton.clicked.connect(self.betButtonFunction)
-        self.hitButton.clicked.connect(self.hitButtonFunction)
-        self.standButton.clicked.connect(self.standButtonFunction)
+        #self.betButton.clicked.connect(self.betButtonFunction)
+        #self.hitButton.clicked.connect(self.hitButtonFunction)
+        #self.standButton.clicked.connect(self.standButtonFunction)
         self.banButton.clicked.connect(self.adminBanButtonFunction)
         self.unbanButton.clicked.connect(self.adminUnbanButtonFunction)
         self.setAdminButton.clicked.connect(self.adminSetAdminButtonFunction)
@@ -843,7 +848,7 @@ class Ui_MainWindow(object):
         self.label_2.setText(_translate("MainWindow", "DECK SKIN"))
         self.label_3.setText(_translate("MainWindow", "TIME TO MOVE"))
         self.timeSecondsLabel.setText(_translate("MainWindow", "10 s"))
-        self.betLabel.setText(_translate("MainWindow", "$"))
+        self.betLabel.setText(_translate("MainWindow", ""))  #był $
         self.betButton.setText(_translate("MainWindow", "BET"))
         self.hitButton.setText(_translate("MainWindow", "HIT"))
         self.standButton.setText(_translate("MainWindow", "STAND"))
@@ -1038,27 +1043,482 @@ class Ui_MainWindow(object):
             # 3. self.replayButton po zakonczonej grze niech sie pojawi show(), a przed giera hide() i tutaj bedzie potrzebne zapisywanie ruchow, najlepeij jakas lista w stylu:
             #    [['uzyta funkcja do rysowania','index','karta-opcjonalnie'],[],[]] , przynajmniej cos takiego sobie wyobrazam, ze najlatwiej bedzie
             # 4. self.exitButton jak wcisnie to powinno przejsc do setupPage i giere wylaczyc czy cos, nwm
-            self.stackedWidget.setCurrentWidget(self.playPage)
-            print('start game')
+
+            self.play_game(game_start_data)
+
         else:
             msg = QtWidgets.QMessageBox()
             msg.setWindowTitle("ERROR")
             msg.setText("Need at least 2 players")
             x = msg.exec_()
 
+    def play_game(self, game_start_date):
+            self.stackedWidget.setCurrentWidget(self.playPage)
+            self.replayButton.hide()
+            self.betButton.hide()
+            self.hitButton.hide()
+            self.standButton.hide()
+            self.addCardTestButton.hide()
+            self.removeCardTestButton.hide()
+            self.betSlider.hide()
+            print('start game')
+            t0 = time.time()
+            twentyone = 21
+            lowest_bet = 5
+            t = 1
+            yes = ['y', 'yes']
+            no = ['n', 'no']
+
+            db = blackjack.DataBase
+            timeToMove = game_start_date['timeToMove']
+            type = game_start_date['users']
+            print(type)
+            numer_of_decks = game_start_date['numberOfDecks']
+            players = []
+            for i in range(len(type)):
+                if type[i] == 'medium':
+                    players.append(Player('AI medium'))
+                elif type[i] == 'easy':
+                    players.append(Player('AI easy'))
+                elif type[i] == 'hard':
+                    players.append(Player('AI hard'))
+                else:
+                    players.append(Player('Player' + str(i)))
+            players = np.asarray(players)
+
+            def getPlayerResult(i):
+                if (win_state[i] == 'w'):
+                    return True
+                elif (win_state[i] == 'd'):
+                    return None
+                else:
+                    return False
+
+            def getAmount(i, amount):
+                if getPlayerResult(i):
+                    return amount
+                elif not getPlayerResult(i):
+                    return (-1 * amount)
+                else:
+                    return 0
+
+            def getCardDictFromList(cardOriginList):
+                cardList = []
+
+                for card in cardOriginList:
+                    if ('10' in card):
+                        cardList.append("10")
+                    else:
+                        cardList.append(card[-1:])
+
+                cardDict = {}
+
+                for card in cardList:
+                    cardDict[card] = cardList.count(card)
+
+                return cardDict
+
+            card_box = {
+                'heart': (['A', 'J', 'Q', 'K'] + ['%d' % i for i in range(2, 11)]) * numer_of_decks,
+                'diamond': (['A', 'J', 'Q', 'K'] + ['%d' % i for i in range(2, 11)]) * numer_of_decks,
+                'club': (['A', 'J', 'Q', 'K'] + ['%d' % i for i in range(2, 11)]) * numer_of_decks,
+                'spade': (['A', 'J', 'Q', 'K'] + ['%d' % i for i in range(2, 11)]) * numer_of_decks
+            }
+            card_cnt = 0
+            shuffle_point = np.random.randint((numer_of_decks * 52) // 2, numer_of_decks * 52)
+            number_of_players = len(players)
+            bjs = [False for i in range(number_of_players)]
+            left_over = [None for i in range(number_of_players)]
+            win_state = ['l' for i in range(number_of_players)]
+            moves = {}
+
+            '''
+            for i in range(number_of_players):
+                print(' ****************** PLAYER %d - %s ****************' % (i + 1, players[i].name))
+                # setting initial bet0
+                players[i].set_bet(lowest_bet, type[i])
+                #wait(t)
+                #QtTest.QTest.qWait(2000)
+            '''
+
+            for i in range(number_of_players):
+                if type[i] == "player":    #powinien być player
+                    #players[i].set_bet(lowest_bet, type[i])
+                    self.hands.hands[i].changeBorderColour('turn')
+                    self.betButton.show()
+                    self.betSlider.show()
+                    QtTest.QTest.qWait(2000)
+                    value = self.betSlider.value()
+                    players[i].set_bet_player(self.betSlider.value())
+                    '''
+                    #TODO 
+                    chcemy ograniczyć czas na wykonanie akcji wybarnia wartości, którą player obstawia (betbutton)
+                    :
+                    - QTimer()
+                    - SingleShot()
+                    - może to? https://stackoverflow.com/questions/54918549/is-there-any-time-limit-in-pushing-the-push-button-in-pyqt5?rq=1
+                    - może to? https://stackoverflow.com/questions/41545300/equivalent-to-time-sleep-for-a-pyqt-application
+                    '''
+                    self.betButton.clicked.connect(lambda: self.betButtonFunction(players[i], value))
+                    self.betSlider.hide()
+                    self.betButton.hide()
+                    self.betLabel.hide()
+                    self.hitButton.show()
+                    self.standButton.show()
+                    QtTest.QTest.qWait(2000)
+                    print(' ****************** PLAYER - %s ****************' % players[i].name)
+                    # start session
+                    print('player is picking two cards...')
+                    card_box, card_cnt, shuffle_point = card_inc(card_box, 2, card_cnt, shuffle_point, numer_of_decks)
+                    players[i].new_session(card_box)
+                    # print(card_box)
+                    players[i].show_state()
+                    bjs[i] = players[i].check_blackjack(twentyone)
+                    #wait(t)
+                    #QtTest.QTest.qWait(2000)
+
+                    print(' ****************** PLAYER - %s ****************' % players[i].name)
+                    players[i].show_state()
+                    self.hands.hands[i].addCard(players[i].last_card())
+                    QtTest.QTest.qWait(500)
+                    self.hands.hands[i].addCard(players[i].last_card1())
+                    QtTest.QTest.qWait(2000)
+                    left_over[i] = players[i].points
+                    if bjs[i]:
+                        self.hands.hands[i].changeBorderColour('win')
+                        #QtTest.QTest.qWait(2000)
+                        left_over[i] = players[i].points
+                    else:
+                        while True:
+                            check_value = None
+                            '''
+                            TODO
+                            chcemy ograniczyć czas na wciśniecei graj lub stop (hitbutton or standbutton)
+                            
+                            '''
+                            # stop betting ?
+                            QTimer.singleShot(10000, self.hitButton.clicked.connect(lambda : self.hitButtonFunction()))
+                            #self.standButton.clicked.connect(lambda :self.standButtonFunction(check_value))
+                            if check_value:
+                                print('player is picking a new card...')
+                                card_box, card_cnt, shuffle_point = card_inc(card_box, 1, card_cnt, shuffle_point,
+                                                                             numer_of_decks)
+                                players[i].hit(card_box)
+                                if players[i].points >= twentyone:
+                                    left_over[i] = players[i].points
+                                    bjs[i] = players[i].check_blackjack(twentyone)
+                                    break
+                            else:
+                                left_over[i] = players[i].points
+                                bjs[i] = players[i].check_blackjack(twentyone)
+                                self.hitButton.hide()
+                                self.standButton.hide()
+                                break
+                elif type[i] == "easy":#powinien być easy
+                    players[i].set_bet(lowest_bet, type[i])
+                    self.hands.hands[i].changeBorderColour('turn')
+                    #QtTest.QTest.qWait(2000)
+                    print(' ****************** PLAYER - %s ****************' % players[i].name)
+                    print('player is picking two cards...')
+                    card_box, card_cnt, shuffle_point = card_inc(card_box, 2, card_cnt, shuffle_point, numer_of_decks)
+                    players[i].new_session(card_box)
+                    players[i].show_state()
+                    bjs[i] = players[i].check_blackjack(twentyone)
+                    #wait(t)
+                    QtTest.QTest.qWait(2000)
+
+                    print(' ****************** PLAYER - %s ****************' % players[i].name)
+                    players[i].show_state()
+                    self.hands.hands[i].addCard(players[i].last_card())
+                    QtTest.QTest.qWait(500)
+                    self.hands.hands[i].addCard(players[i].last_card1())
+                    QtTest.QTest.qWait(2000)
+                    left_over[i] = players[i].points
+                    if bjs[i]:
+                        self.hands.hands[i].changeBorderColour('win')
+                        QtTest.QTest.qWait(2000)
+                        left_over[i] = players[i].points
+                        moves[i] = players[i].get_stats()
+                    else:
+                        while players[i].points < 20:
+                            # stop betting ?
+                            print('do you want to hit ? (y / n)')
+                            if random.randint(0, 1) == True:
+                                hit_stand = "y"
+                                print('y')
+                                print('player is picking a new card...')
+                                card_box, card_cnt, shuffle_point = card_inc(card_box, 1, card_cnt, shuffle_point,
+                                                                             numer_of_decks)
+                                players[i].hit(card_box)
+                                self.hands.hands[i].addCard(players[i].last_card())
+                                QtTest.QTest.qWait(2000)
+                                if players[i].points >= twentyone:
+                                    left_over[i] = players[i].points
+                                    bjs[i] = players[i].check_blackjack(twentyone)
+                                    break
+                            else:
+                                print('n')
+                                left_over[i] = players[i].points
+                                bjs[i] = players[i].check_blackjack(twentyone)
+                                moves[i] = players[i].get_stats()
+                                self.hands.hands[i].changeBorderColour('wait')
+                                QtTest.QTest.qWait(2000)
+                                break
+                elif type[i] == "hard":
+                    players[i].set_bet(lowest_bet, type[i])
+                    self.hands.hands[i].changeBorderColour('turn')
+                    #QtTest.QTest.qWait(2000)
+                    print(' ****************** PLAYER - %s ****************' % players[i].name)
+                    # start session
+                    print('player is picking two cards...')
+                    card_box, card_cnt, shuffle_point = card_inc(card_box, 2, card_cnt, shuffle_point, numer_of_decks)
+                    players[i].new_session(card_box)
+                    # print(card_box)
+                    players[i].show_state()
+                    bjs[i] = players[i].check_blackjack(twentyone)
+                    #wait(t)
+                    QtTest.QTest.qWait(2000)
+
+                    print(' ****************** PLAYER - %s ****************' % players[i].name)
+                    players[i].show_state()
+                    self.hands.hands[i].addCard(players[i].last_card())
+                    QtTest.QTest.qWait(500)
+                    self.hands.hands[i].addCard(players[i].last_card1())
+                    QtTest.QTest.qWait(2000)
+                    left_over[i] = players[i].points
+                    if bjs[i]:
+                        left_over[i] = players[i].points
+                        moves[i] = players[i].get_stats()
+                        self.hands.hands[i].changeBorderColour('win')
+                        QtTest.QTest.qWait(2000)
+                    else:
+                        while True:
+                            # stop betting ?
+                            print('do you want to hit ? (y / n)')
+                            if players[i].points < 20:
+                                hit_stand = "y"
+                                print('y')
+                                print('player is picking a new card...')
+                                card_box, card_cnt, shuffle_point = card_inc(card_box, 1, card_cnt, shuffle_point,
+                                                                             numer_of_decks)
+                                number_of_points = 21 - players[i].points
+                                if number_of_points > 9:
+                                    number_of_points = np.int64(np.floor(number_of_points / 2))
+                                    players[i].hit_hard(card_box, number_of_points)
+                                else:
+                                    players[i].hit_hard(card_box, number_of_points)
+                                self.hands.hands[i].addCard(players[i].last_card())
+                                QtTest.QTest.qWait(2000)
+                                if players[i].points >= twentyone:
+                                    left_over[i] = players[i].points
+                                    bjs[i] = players[i].check_blackjack(twentyone)
+                                    self.hands.hands[i].changeBorderColour('wait')
+                                    QtTest.QTest.qWait(2000)
+                                    break
+                            else:
+                                print('n')
+                                bjs[i] = players[i].check_blackjack(twentyone)
+                                moves[i] = players[i].get_stats()
+                                left_over[i] = players[i].points
+                                self.hands.hands[i].changeBorderColour('wait')
+                                QtTest.QTest.qWait(2000)
+                                break
+                else:
+                    players[i].set_bet(lowest_bet, type[i])
+                    print(' ****************** PLAYER - %s ****************' % players[i].name)
+                    # start session
+                    self.hands.hands[i].changeBorderColour('turn')
+                    #QtTest.QTest.qWait(2000)
+                    print('player is picking two cards...')
+                    card_box, card_cnt, shuffle_point = card_inc(card_box, 2, card_cnt, shuffle_point, numer_of_decks)
+                    players[i].new_session(card_box)
+                    # print(card_box)
+                    players[i].show_state()
+                    bjs[i] = players[i].check_blackjack(twentyone)
+                    #wait(t)
+                    #QtTest.QTest.qWait(2000)
+
+                    print(' ****************** PLAYER - %s ****************' % players[i].name)
+                    players[i].show_state()
+                    self.hands.hands[i].addCard(players[i].last_card())
+                    QtTest.QTest.qWait(500)
+                    self.hands.hands[i].addCard(players[i].last_card1())
+                    QtTest.QTest.qWait(2000)
+                    left_over[i] = players[i].points
+                    if bjs[i]:
+                        left_over[i] = players[i].points
+                        moves[i] = players[i].get_stats()
+                        self.hands.hands[i].changeBorderColour('win')
+                        QtTest.QTest.qWait(2000)
+                    else:
+                        while True:
+                            print('do you want to hit ? (y / n)')
+                            if players[i].check_A() == 0:
+                                if players[i].points < 17:
+                                    hit_stand = "y"
+                                    print('y')
+                                    print('player is picking a new card...')
+                                    card_box, card_cnt, shuffle_point = card_inc(card_box, 1, card_cnt, shuffle_point,
+                                                                                 numer_of_decks)
+                                    players[i].hit(card_box)
+                                    self.hands.hands[i].addCard(players[i].last_card())
+                                    QtTest.QTest.qWait(2000)
+                                    if players[i].points >= twentyone:
+                                        left_over[i] = players[i].points
+                                        moves[i] = players[i].get_stats()
+                                        bjs[i] = players[i].check_blackjack(twentyone)
+                                        self.hands.hands[i].changeBorderColour('wait')
+                                        QtTest.QTest.qWait(2000)
+                                        break
+                                else:
+                                    print('n')
+                                    bjs[i] = players[i].check_blackjack(twentyone)
+                                    moves[i] = players[i].get_stats()
+                                    left_over[i] = players[i].points
+                                    self.hands.hands[i].changeBorderColour('wait')
+                                    QtTest.QTest.qWait(2000)
+                                    break
+                            elif players[i].check_A() == 1:
+                                if players[i].points < 18:
+                                    hit_stand = "y"
+                                    print('y')
+                                    print('player is picking a new card...')
+                                    card_box, card_cnt, shuffle_point = card_inc(card_box, 1, card_cnt, shuffle_point,
+                                                                                 numer_of_decks)
+                                    players[i].hit(card_box)
+                                    if players[i].points >= twentyone:
+                                        left_over[i] = players[i].points
+                                        moves[i] = players[i].get_stats()
+                                        bjs[i] = players[i].check_blackjack(twentyone)
+                                        self.hands.hands[i].changeBorderColour('wait')
+                                        QtTest.QTest.qWait(2000)
+                                        break
+                                else:
+                                    print('n')
+                                    bjs[i] = players[i].check_blackjack(twentyone)
+                                    moves[i] = players[i].get_stats()
+                                    left_over[i] = players[i].points
+                                    self.hands.hands[i].changeBorderColour('wait')
+                                    QtTest.QTest.qWait(2000)
+                                    break
+                            elif players[i].check_A() == 2:
+                                print('n')
+                                bjs[i] = players[i].check_blackjack(twentyone)
+                                moves[i] = players[i].get_stats()
+                                left_over[i] = players[i].points
+                                self.hands.hands[i].changeBorderColour('wait')
+                                QtTest.QTest.qWait(2000)
+                                break
+
+            bjs = np.array(bjs)
+            win_state = np.array(win_state)
+            left_over = np.array(left_over)
+            print(left_over)
+            for l in range(number_of_players):
+                print(left_over[l])
+                if left_over[l] > 21:
+                    left_over[l] = 0
+
+            print(left_over)
+            for k in range(number_of_players):
+                if (max(left_over) == left_over[k]) and left_over[k] > 0:
+                    win_state[k] = 'w'
+                else:
+                    win_state[k] = 'l'
+
+            for s in range(number_of_players):
+                if win_state[s] == 'w':
+                    self.hands.hands[s].changeBorderColour('win')
+                else:
+                    self.hands.hands[s].changeBorderColour('lost')
+            print(win_state)
+            for i in range(number_of_players):
+                players[i].update_money(win_state[i])
+                if win_state[i] == 'w':
+                    wstate, gstate = 'wins', 'gains'
+                else:
+                    wstate, gstate = 'loses', 'loses'
+                print('"%s" %s, %s bet of %d, current fund: %d' % (
+                    players[i].name, wstate, gstate, players[i].bet if not bjs[i] else 1.5 * players[i].bet,
+                    players[i].money))
+                # players[i].show_state()
+
+            '''
+            # W TYM MIEJSCU JEST ZRZUCANIE STATYSTYK DO BAZY DANYCH PO ZAKOŃCZONEJ ROZGRYWCE !
+        # user
+        if(type[i] == "p"):
+            total_time = time.time() - t0
+            db.updatePlayerStat(db,players[i].name,getPlayerResult(i),round(total_time,2),getAmount(i,players[i].bet if not bjs[i] else 1.5 * players[i].bet))
+            db.updateCardStats(db,players[i].name,getCardDictFromList(players[i].get_stats()))
+        # AI easy
+        if (type[i] == "e"):
+            total_time = time.time() - t0
+            db.updatePlayerStat(db, 'AI- easy', getPlayerResult(i), round(total_time, 2),getAmount(i, players[i].bet if not bjs[i] else 1.5 * players[i].bet))
+            db.updateCardStats(db, 'AI- easy', getCardDictFromList(players[i].get_stats()))
+        # AI medium
+        if (type[i] == "m"):
+            total_time = time.time() - t0
+            db.updatePlayerStat(db, 'AI- medium', getPlayerResult(i), round(total_time, 2),getAmount(i, players[i].bet if not bjs[i] else 1.5 * players[i].bet))
+            db.updateCardStats(db, 'AI- medium' , getCardDictFromList(players[i].get_stats()))
+        # AI hard
+        if (type[i] == "h"):
+            total_time = time.time() - t0
+            db.updatePlayerStat(db, 'AI- hard', getPlayerResult(i), round(total_time, 2),getAmount(i, players[i].bet if not bjs[i] else 1.5 * players[i].bet))
+            db.updateCardStats(db, 'AI- hard' , getCardDictFromList(players[i].get_stats()))
+        # W TYM MIEJSCU SIE TO KONCZY !
+            '''
+
+            total_time = time.time() - t0
+            print('Game time: ' + str(total_time))
+            print('###################################################################################')
+            print('################################## GAME OVER ######################################')
+
+            self.replayButton.show()
+            self.replayButton.clicked.connect(lambda: self.replayButtonFunction(moves, win_state))
+
     def exitButtonFunction(self):
         self.hands.setParent(None)
         self.stackedWidget.setCurrentWidget(self.setupPage)
         print('exit game')
 
-    def betButtonFunction(self):
+
+    def betButtonFunction(self, Player, value):
+        Player.set_bet_player(value)
+        self.betButton.hide()
+        self.betSlider.hide()
+        self.betLabel.hide()
         print('bet')
 
     def hitButtonFunction(self):
+        checkvalue = True
+        print(checkvalue)
         print('hit')
 
+
     def standButtonFunction(self):
+        checkvalue = False
+        print(checkvalue)
         print('stand')
+
+    def replayButtonFunction(self, moves, win_state):
+        keys = moves.keys()
+        values = list(moves.values())
+        self.removeCardTest()
+        for k in range(len(keys)):
+            self.hands.hands[k].changeBorderColour('turn')
+            for l in range(len(values[k])):
+                self.hands.hands[k].addCard(values[k][l])
+                QtTest.QTest.qWait(2000)
+            self.hands.hands[k].changeBorderColour('wait')
+
+        QtTest.QTest.qWait(2000)
+        for s in range(len(keys)):
+            if win_state[s] == 'w':
+                self.hands.hands[s].changeBorderColour('win')
+            else:
+                self.hands.hands[s].changeBorderColour('lost')
+
+        QtTest.QTest.qWait(2000)
 
     def rankButtonFunction(self):
         db = blackjack.DataBase()
@@ -1117,7 +1577,7 @@ class Ui_MainWindow(object):
     def addCardTest(self):
         #print('add card')
         for i in range(len(self.hands.hands)):
-            self.hands.hands[i].addCard('2karo')
+            self.hands.hands[i].addCard('club_2')
 
     def removeCardTest(self):
         self.hands.removeCards()
