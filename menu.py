@@ -1439,7 +1439,6 @@ class Ui_MainWindow(object):
                 QtTest.QTest.qWait(2000)
                 self.value = self.betSlider.value()
                 players[i].set_bet_player(self.betSlider.value())
-                self.bet_of_players[i] = players[i].get_bet()
                 '''
                     #TODO
                     chcemy ograniczyć czas na wykonanie akcji wybarnia wartości, którą player obstawia (betbutton)
@@ -1473,6 +1472,7 @@ class Ui_MainWindow(object):
                 self.betButton.hide()
                 self.betSlider.hide()
                 self.betLabel.hide()
+                self.bet_of_players[i] = players[i].get_bet()
                 QtTest.QTest.qWait(2000)
                 print(' ****************** PLAYER - %s ****************' % players[i].name)
                 # start session

@@ -98,8 +98,9 @@ class Player:
 
     def set_bet_player(self, number):
         self.bet = number
-        self.money -= self.bet
-        print(self.bet)
+        self.money = 500 - number
+        print("bet: " + str(self.bet))
+        print("money: " + str(self.money))
 
     def show_state(self):
         print('your cards : ', self.cards, '\t\t total points : ', self.points)
