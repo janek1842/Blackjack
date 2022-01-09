@@ -51,15 +51,15 @@ After getting to know with all these features you can click **PLAY** button to s
 
 If you are ready, you can click **START GAME** to begin adventure with blackjack. :rocket:
 
-Now, you are allowed to enter your **BET** - the amount of money based on which your final result will be calculated. After that, the game starts and you decide whether to **HIT** (take next card) or **STAND** (pause). After each round, you can **REPLAY** your game to enjoy it once more ! 
+Now, you are allowed to enter your **BET** - the amount of money based on which your final result will be calculated. After that, the game starts and you decide whether to **HIT** (take next card) or **STAND** (pause). Observe your score and frame color to control your status **(WAIT/LOSE/WIN/TURN)**. After each round, you can **REPLAY** your game to enjoy it once more!  
 
 ![image](https://user-images.githubusercontent.com/56030577/148691415-23ec09bf-4f37-4c75-bb3b-9c1ba1d46187.png)
 
 ![image](https://user-images.githubusercontent.com/56030577/148691712-46f0bf8e-a953-4845-bcd6-1773c7759bdf.png)
 
-# Compatibility 
+# Compatibility :computer:
 
-This game has been tested positively on Windows 10 and Linux Arch OS 
+This game has been tested positively on Windows 10 and Linux Arch OS. 
 
 
 
