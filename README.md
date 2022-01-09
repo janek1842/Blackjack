@@ -29,7 +29,7 @@ This project is about a popular card game blackjack- *in polish oczko*. It was m
 
 ## What are the rules :grey_question:
 
-The main goal for the player is to reach 21 points (blackjack) or to get as close as possible to this value but not to go beyond that! To do this, player is taking cards from the decks located in the middle of the table. Every card has its own value which are summed up for every user. Player has also possibility to pass the game to stop it. 
+The main goal for the player is to reach 21 points (blackjack) or to get as close as possible to this value but not to go beyond that! To do this, player is taking cards from the decks located in the middle of the table. Every card has its own value which is summed up for every user. Player has also possibility to pass the game to stop it. 
 
 To add a bit more excitement, the game is being played for money. At the beginning players are betting for how much they want to play and this sum is added or taken from their overall money at the end (depending on their result).   
 
@@ -39,19 +39,19 @@ To begin with, please run the game. In the left panel you might see five places 
 
 <img width="1261" alt="mainPanel" src="https://user-images.githubusercontent.com/56030577/145471598-ef6911f8-5e18-49a2-822f-199cab0fd9f6.png">
 
-If you want to adjust you profile features please click **Manage**.
+If you want to adjust you profile features please click **MANAGE**.
 
 <img width="1262" alt="ManageView" src="https://user-images.githubusercontent.com/56030577/145471943-f72a0ca2-5058-42ec-94cb-d80c6f7e471e.png">
 
-This app has the possibility to view that ranking (specified by money) and also more detailed statistics of every user. To view this please click **RANKING/STATISTICS** button to show this panel.
+This app has the possibility to see the ranking (ordered by money) and also more detailed statistics of every user. To view this, please click **RANKING/STATISTICS** button.
 
-After getting to know with all these features you can click **PLAY** button to specify parameters of the game. Here you can choose maximum 5 and minimum 2 players from currently logged users and Artificial Intelligence represented by your computer with specified level of advancement (easy, medium, hard). Moreover, you can specify layout of your cards from two possible options and number of decks (in order to harden guessing remaining cards). There is also option to change the time interval between player moves.  
+After getting to know with all these features you can click **PLAY** button to specify parameters of the game. Here you can choose maximum 5 and minimum 2 players from currently logged users and Artificial Intelligence bots represented by your computer with specified level of advancement (easy, medium, hard). Moreover, you can set layout of your cards from two possible options and number of decks (in order to harden guessing remaining cards). There is also option to change the time interval between players moves.  
 
 <img width="1264" alt="optionpanel" src="https://user-images.githubusercontent.com/56030577/145474461-24371e88-d218-43d0-90c0-117a302242b7.png">
 
 If you are ready, you can click **START GAME** to begin adventure with blackjack. :rocket:
 
-Now, you are allowed to enter your **BET** - the amount of money based on which your final result will be calculated. After that, the game starts and you decide whether to **HIT** (take next card) or **STAND** (pause). Observe your score and frame color to control your status **(WAIT/LOSE/WIN/TURN)**. After each round, you can **REPLAY** your game to enjoy it once more!  
+Now, you are allowed to enter your **BET** - the amount of money based on which, your final result will be calculated. After that, the game starts and you decide whether to **HIT** (take next card) or **STAND** (pass). Observe your score and frame color to control your status **(WAIT/LOSE/WIN/TURN)**. After each round, you can **REPLAY** your game to enjoy it once more!  
 
 ![image](https://user-images.githubusercontent.com/56030577/148691415-23ec09bf-4f37-4c75-bb3b-9c1ba1d46187.png)
 
