@@ -1,9 +1,13 @@
-# Installation :file_folder:
+# Installation and run :file_folder:
 
 If some extensions are missing please type: 
 
 ```
 pip install -r requirements.txt
+```
+
+```
+python menu.py
 ```
 ## Media sources
 
