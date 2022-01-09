@@ -58,27 +58,7 @@ class DataBase:
                 con.execute("INSERT INTO statistics values('{}',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) on conflict do nothing ".format(1))
                 con.execute("INSERT INTO statistics values('{}',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) on conflict do nothing ".format(2))
                 con.execute("INSERT INTO statistics values('{}',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) on conflict do nothing".format(3))
-
-            # For tests only -----------
-
-                con.execute("INSERT INTO players values(null,'player1','{}',1000,'False','False','anubis.png',null) on conflict do nothing".format(
-                    crypter.encrypt_message("tajnehaslo")))
-                con.execute("INSERT INTO players values(null,'player2','{}',2000,'False','False','anubis.png',null) on conflict do nothing ".format(
-                    crypter.encrypt_message("tajnehaslo")))
-                con.execute("INSERT INTO players values(null,'player3','{}',3000,'False','False','anubis.png',null) on conflict do nothing ".format(
-                    crypter.encrypt_message("tajnehaslo")))
-                con.execute("INSERT INTO players values(null,'player4','{}',4000,'False','False','anubis.png',null) on conflict do nothing ".format(
-                    crypter.encrypt_message("tajnehaslo")))
-                con.execute("INSERT INTO players values(null,'player5','{}',5000,'False','False','anubis.png',null) on conflict do nothing ".format(
-                    crypter.encrypt_message("tajnehaslo")))
-
                 con.execute("INSERT INTO statistics values('{}',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) on conflict do nothing ".format(4))
-                con.execute("INSERT INTO statistics values('{}',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) on conflict do nothing ".format(5))
-                con.execute("INSERT INTO statistics values('{}',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) on conflict do nothing".format(6))
-                con.execute("INSERT INTO statistics values('{}',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) on conflict do nothing".format(7))
-                con.execute("INSERT INTO statistics values('{}',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) on conflict do nothing".format(8))
-                con.execute("INSERT INTO statistics values('{}',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) on conflict do nothing".format(9))
-            # -------------
 
             except sqlite3.OperationalError:
                 print("cos nie tak ")
@@ -101,7 +81,7 @@ class DataBase:
             cur = con.cursor()
             playerChecker = False
             if(self.checkIfPlayerExists(username)==False):
-                cur.execute("INSERT INTO players values(null,'{}','{}',0,'True','False','anubis.png',null) ".format(username,crypter.encrypt_message(password)))
+                cur.execute("INSERT INTO players values(null,'{}','{}',5000,'True','False','anubis.png',null) ".format(username,crypter.encrypt_message(password)))
                 cur.execute('SELECT playerID FROM players where username=?',(username,))
                 playerID= cur.fetchone()[0]
                 cur.execute("INSERT INTO statistics values('{}',0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0) ".format(playerID))
