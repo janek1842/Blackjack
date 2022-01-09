@@ -79,6 +79,13 @@ class Player:
         self.bj_state = False
         self.cards = [pick_a_card(card_box, True), pick_a_card(card_box, True)]
         self.points = calc_points(self.cards)
+
+    def get_points(self):
+        return calc_points(self.cards)
+
+    def get_bet(self):
+        return self.bet
+
         
     def set_bet(self, lowest_bet, type_of_player):
         if type_of_player =="p":
