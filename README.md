@@ -5,6 +5,7 @@ If some extensions are missing please type:
 ```
 pip install -r requirements.txt
 ```
+To run the game please type:
 
 ```
 python menu.py
