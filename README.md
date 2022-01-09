@@ -10,6 +10,12 @@ To run the game please type:
 ```
 python menu.py
 ```
+## Admin credentials:
+
+```
+Login: adminadmin
+Password: adminadmin
+```
 ## Media sources
 
 Avatars and playing cards were taken from:
@@ -44,6 +50,18 @@ After getting to know with all these features you can click **PLAY** button to s
 <img width="1264" alt="optionpanel" src="https://user-images.githubusercontent.com/56030577/145474461-24371e88-d218-43d0-90c0-117a302242b7.png">
 
 If you are ready, you can click **START GAME** to begin adventure with blackjack. :rocket:
+
+Now, you are allowed to enter your **BET** - the amount of money based on which your final result will be calculated. After that, the game starts and you decide whether to **HIT** (take next card) or **STAND** (pause). After each round, you can **REPLAY** your game to enjoy it once more ! 
+
+![image](https://user-images.githubusercontent.com/56030577/148691415-23ec09bf-4f37-4c75-bb3b-9c1ba1d46187.png)
+
+![image](https://user-images.githubusercontent.com/56030577/148691712-46f0bf8e-a953-4845-bcd6-1773c7759bdf.png)
+
+# Compatibility 
+
+This game has been tested positively on Windows 10 and Linux Arch OS 
+
+
 
 
 
