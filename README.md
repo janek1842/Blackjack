@@ -53,6 +53,10 @@ If you are ready, you can click **START GAME** to begin adventure with blackjack
 
 Now, you are allowed to enter your **BET** - the amount of money based on which, your final result will be calculated. After that, the game starts and you decide whether to **HIT** (take next card) or **STAND** (pass). Observe your score and frame color to control your status **(WAIT/LOST/WIN/TURN)**. After each round, you can **REPLAY** your game to enjoy it once more!  
 
+## Money settlement in details :moneybag:
+
+Each player has $500 available at the beginning of the game. He can bet the whole amount or less. AI(easy, medium, hard) bet $500 by default. At the end of the game, if a player has lost, we deduct what he bet from his $500. If he won and had 21 points then he receives 2.5 × the amount bet + (500 - the amount bet). If he won and did not have 21 points, he receives 2 × the amount bet + (500-amount bet).
+
 ![image](https://user-images.githubusercontent.com/56030577/148691415-23ec09bf-4f37-4c75-bb3b-9c1ba1d46187.png)
 
 ![image](https://user-images.githubusercontent.com/56030577/148691712-46f0bf8e-a953-4845-bcd6-1773c7759bdf.png)
