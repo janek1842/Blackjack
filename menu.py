@@ -1160,6 +1160,11 @@ class Ui_MainWindow(object):
         self.timer = QtCore.QTimer()
         self.timer.setSingleShot(True)
 
+        try:
+            self.replayButton.disconnect()
+        except TypeError:
+            pass
+
         for k in range(number_of_players):
             self.hands.hands[k].money.hide()
 
