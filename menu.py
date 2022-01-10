@@ -1341,6 +1341,7 @@ class Ui_MainWindow(object):
                     self.moves[i] = players[i].get_stats()
                     self.hands.hands[i].changeBorderColour('win')
                     self.hands.hands[i].action.setText('Win')
+                    self.points_of_players[i] = points_of_pl
                     QtTest.QTest.qWait(2000)
                 else:
                     while True:
@@ -1690,6 +1691,7 @@ class Ui_MainWindow(object):
 
         self.replayButton.show()
         print(self.moves)
+        print(self.points_of_players)
         self.replayButton.clicked.connect(lambda: self.replayButtonFunction())
 
     def exitButtonFunction(self):
@@ -1716,6 +1718,7 @@ class Ui_MainWindow(object):
 
     def replayButtonFunction(self):
         print(self.moves)
+        print(self.points_of_players)
         self.removeCardTest()
         values = list(self.moves.values())
 
@@ -1731,7 +1734,7 @@ class Ui_MainWindow(object):
                 if l == 0:
                     QtTest.QTest.qWait(500)
                 else:
-                    self.hands.hands[k].points.setText(str(self.points_of_players[k][l-1]))
+                    self.hands.hands[k].points.setText('Points: ' + str(self.points_of_players[k][l-1]))
                     QtTest.QTest.qWait(2000)
             self.hands.hands[k].changeBorderColour('wait')
             self.hands.hands[k].action.setText('Wait')
