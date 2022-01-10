@@ -1220,6 +1220,7 @@ class Ui_MainWindow(object):
                                 left_over[i] = players[i].points
                                 bjs[i] = players[i].check_blackjack(twentyone)
                                 self.hands.hands[i].changeBorderColour('wait')
+                                self.moves[i] = players[i].get_stats()
                                 self.hands.hands[i].action.setText('Wait')
                                 self.points_of_players[i] = points_of_pl
                                 break
@@ -1421,7 +1422,7 @@ class Ui_MainWindow(object):
                             bjs[i] = players[i].check_blackjack(twentyone)
                             self.moves[i] = players[i].get_stats()
                             left_over[i] = players[i].points
-                            self.points_of_players = points_of_pl
+                            self.points_of_players[i] = points_of_pl
                             self.hands.hands[i].changeBorderColour('wait')
                             self.hands.hands[i].action.setText('Wait')
                             QtTest.QTest.qWait(2000)
