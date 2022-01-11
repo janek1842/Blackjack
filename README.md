@@ -1,7 +1,11 @@
 # Installation and run :file_folder:
 
-If some extensions are missing please type: 
+In order to clone the repository please type in your cmd:
+```
+git clone https://github.com/janek1842/Blackjack.git
+```
 
+If some extensions are missing please type: 
 ```
 pip install -r requirements.txt
 ```
