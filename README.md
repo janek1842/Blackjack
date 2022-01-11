@@ -58,9 +58,8 @@ If you are ready, you can click **START GAME** to begin adventure with blackjack
 Now, you are allowed to enter your **BET** - the amount of money based on which, your final result will be calculated. After that, the game starts and you decide whether to **HIT** (take next card) or **STAND** (pass). Observe your score and frame color to control your status **(WAIT/LOST/WIN/TURN)**. After each round, you can **REPLAY** your game to enjoy it once more!  
 
 <p align="center">
-  ![better](https://user-images.githubusercontent.com/56030577/149002510-7b7ccda1-528b-426e-ac9c-35aa46a7398d.gif)
+  <img src="https://user-images.githubusercontent.com/56030577/149002950-9da8d2db-cbed-416f-b1a4-8ca4839d82aa.gif" alt="animated" />
 </p>
-
 
 ## Money settlement in details :moneybag:
 
