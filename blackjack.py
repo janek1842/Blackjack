@@ -153,9 +153,10 @@ class DataBase:
 
         def makeBanned(self,username):
             con = sqlite3.connect('database.db')
-            cur = con.cursor()
-            cur.execute('UPDATE players SET isActive="False" where username =?',(username,))
-            con.commit()
+            if(username!="adminadmin"):
+                cur = con.cursor()
+                cur.execute('UPDATE players SET isActive="False" where username =?',(username,))
+                con.commit()
 
         def makeUnBanned(self,username):
             con = sqlite3.connect('database.db')
@@ -171,9 +172,10 @@ class DataBase:
 
         def makeUser(self,username):
             con = sqlite3.connect('database.db')
-            cur = con.cursor()
-            cur.execute('UPDATE players SET isAdmin="False" where username =?',(username,))
-            con.commit()
+            if (username!="adminadmin"):
+                cur = con.cursor()
+                cur.execute('UPDATE players SET isAdmin="False" where username =?',(username,))
+                con.commit()
 
         def getCardStatistics(self,username):
             con = sqlite3.connect('database.db')
