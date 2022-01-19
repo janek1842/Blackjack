@@ -14,7 +14,7 @@ To run the game please type:
 ```
 python menu.py
 ```
-## Admin credentials:
+## Super admin credentials:
 
 ```
 Login: adminadmin
