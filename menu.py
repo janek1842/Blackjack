@@ -1072,6 +1072,17 @@ class Ui_MainWindow(object):
         self.removeCardTestButton.hide()
         self.betSlider.hide()
         self.exitButton.hide()
+
+        self.exitButton.setDisabled(True)
+        self.replayButton.setDisabled(True)
+        self.betButton.setDisabled(True)
+        self.hitButton.setDisabled(True)
+        self.standButton.setDisabled(True)
+        self.addCardTestButton.setDisabled(True)
+        self.removeCardTestButton.setDisabled(True)
+        self.betSlider.setDisabled(True)
+        self.exitButton.setDisabled(True)
+
         print('start game')
         t0 = time.time()
         twentyone = 21
@@ -1465,6 +1476,9 @@ class Ui_MainWindow(object):
                     self.betButton.hide()
                     self.betSlider.hide()
                     self.betLabel.hide()
+                    self.betButton.setDisabled(True)
+                    self.betSlider.setDisabled(True)
+                    self.betLabel.setDisabled(True)
                     self.betMove = True
                     print('BET', self.value)
 
@@ -1474,6 +1488,10 @@ class Ui_MainWindow(object):
                 self.betSlider.show()
                 self.betLabel.show()
 
+                self.betButton.setDisabled(False)
+                self.betSlider.setDisabled(False)
+                self.betLabel.setDisabled(False)
+
                 for x in range(timeToMove):
                     QtTest.QTest.qWait(1000)
                     print("waitin bet")
@@ -1482,9 +1500,6 @@ class Ui_MainWindow(object):
                         print("break")
                         break
 
-                self.betButton.hide()
-                self.betSlider.hide()
-                self.betLabel.hide()
                 self.bet_of_players[i] = players[i].get_bet()
                 QtTest.QTest.qWait(2000)
                 print(' ****************** PLAYER - %s ****************' % players[i].name)
@@ -1533,6 +1548,8 @@ class Ui_MainWindow(object):
                         print("HIT", i)
                         self.hands.hands[i].points.setText('Points: ' + str(players[i].get_points()))
                         points_of_pl.append(players[i].get_points())
+                        self.hitButton.setDisabled(True)
+                        self.standButton.setDisabled(True)
                         if players[i].points >= twentyone:
                             left_over[i] = players[i].points
                             bjs[i] = players[i].check_blackjack(twentyone)
@@ -1544,11 +1561,15 @@ class Ui_MainWindow(object):
                             self.hitButton.hide()
                             self.standButton.hide()
                         else:
+                            self.hitButton.setDisabled(False)
+                            self.standButton.setDisabled(False)
                             self.timer.start(timeToMove*1000)  # odswieza czekanie
 
                     def standFun():
                         self.timer.stop()
                         self.endMove = True
+                        self.hitButton.setDisabled(True)
+                        self.standButton.setDisabled(True)
                         left_over[i] = players[i].points
                         bjs[i] = players[i].check_blackjack(twentyone)
                         self.moves[i] = players[i].get_stats()
@@ -1581,7 +1602,8 @@ class Ui_MainWindow(object):
                     # print("prejoin")
                     # thread.join()
                     # print("afterjoin")
-
+                    self.hitButton.setDisabled(False)
+                    self.standButton.setDisabled(False)
                     # glupie ale o dziwo dziala XD
                     for x in range(100):
                         QtTest.QTest.qWait(1000)
@@ -1667,10 +1689,12 @@ class Ui_MainWindow(object):
 
 
         self.replayButton.show()
+        self.replayButton.setDisabled(False)
         print(self.moves)
         print(self.points_of_players)
         self.replayButton.clicked.connect(lambda: self.replayButtonFunction())
         self.exitButton.show()
+        self.exitButton.setDisabled(False)
 
     def exitButtonFunction(self):
         self.hands.setParent(None)
@@ -1697,6 +1721,8 @@ class Ui_MainWindow(object):
     def replayButtonFunction(self):
         self.exitButton.hide()
         self.replayButton.hide()
+        self.exitButton.setDisabled(True)
+        self.replayButton.setDisabled(True)
         print(self.moves)
         print(self.points_of_players)
         self.removeCardTest()
@@ -1733,6 +1759,8 @@ class Ui_MainWindow(object):
         QtTest.QTest.qWait(2000)
         self.exitButton.show()
         self.replayButton.show()
+        self.exitButton.setDisabled(False)
+        self.replayButton.setDisabled(False)
 
     def rankButtonFunction(self):
         db = blackjack.DataBase()
