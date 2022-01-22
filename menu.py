@@ -94,6 +94,7 @@ class Ui_MainWindow(object):
                                  "    padding: 2px;\n"
                                  "}")
         self.centralwidget = QtWidgets.QWidget(MainWindow)
+        self.MainWindow = MainWindow
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
@@ -816,6 +817,14 @@ class Ui_MainWindow(object):
         self.removeCardTestButton.setText('remove')
         self.removeCardTestButton.clicked.connect(self.removeCardTest)
 
+        def ExitPls():
+            if not self.MainWindow.isVisible():
+                print("EXITTTT PLS")
+                sys.exit()
+        self.bruteExitTimer = QTimer()
+        self.bruteExitTimer.timeout.connect(ExitPls)  # execute `display_time`
+        self.bruteExitTimer.setInterval(1000)  # 1000ms = 1s
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
@@ -1084,6 +1093,8 @@ class Ui_MainWindow(object):
         self.exitButton.setDisabled(True)
 
         print('start game')
+        self.bruteExitTimer.start()
+
         t0 = time.time()
         twentyone = 21
         lowest_bet = 5
