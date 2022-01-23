@@ -111,7 +111,6 @@ class DataBase:
             cur = con.cursor()
             result=False
             cur.execute('SELECT password FROM players where username =?', (username,))
-            print("oto1")
             dbPassword = crypter.decrypt_message(cur)
 
             if(dbPassword==password):
@@ -148,7 +147,6 @@ class DataBase:
             cur = con.cursor()
             cur.execute('SELECT username,isActive,isAdmin FROM players ')
             player = cur.fetchall()
-            print(player)
             return player
 
         def makeBanned(self,username):

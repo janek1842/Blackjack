@@ -16,7 +16,7 @@ from PyQt5.QtWidgets import QApplication
 
 import blackjack
 from login import Ui_LoginDialog
-from manage2 import Ui_Dialog
+from manage import Ui_Dialog
 import threading
 import math
 import random
@@ -108,7 +108,7 @@ class Ui_MainWindow(object):
         self.mainMenuPage = QtWidgets.QWidget()
         self.mainMenuPage.setObjectName("mainMenuPage")
         self.verticalLayoutWidget = QtWidgets.QWidget(self.mainMenuPage)
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(790, 390, 251, 111))
+        self.verticalLayoutWidget.setGeometry(QtCore.QRect(950, 450, 251, 111))
         self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
         self.verticalLayout_1 = QtWidgets.QVBoxLayout(self.verticalLayoutWidget)
         self.verticalLayout_1.setContentsMargins(0, 0, 0, 0)
@@ -293,6 +293,10 @@ class Ui_MainWindow(object):
         self.adminPanelButton = QtWidgets.QPushButton(self.mainMenuPage)
         self.adminPanelButton.setGeometry(QtCore.QRect(1160, 0, 75, 23))
         self.adminPanelButton.setObjectName("adminPanelButton")
+        self.cardImage = QtWidgets.QLabel(self.mainMenuPage)
+        self.cardImage.setGeometry(QtCore.QRect(374, 100, 512, 512))
+        self.pixmapCard = QPixmap('images/others/set1_main.png')
+        self.cardImage.setPixmap(self.pixmapCard)
         self.stackedWidget.addWidget(self.mainMenuPage)
 
         # SETUP PAGE
@@ -678,12 +682,11 @@ class Ui_MainWindow(object):
         self.gridLayout_6.addWidget(self.st_6, 5, 1, 1, 1)
         self.statAvatar = QtWidgets.QLabel(self.statisticsPage)
         self.statAvatar.setGeometry(QtCore.QRect(1039, 50, 100, 100))
-        self.statAbout = QtWidgets.QLabel(self.statisticsPage)
+        self.statAbout = QtWidgets.QPlainTextEdit(self.statisticsPage)
         self.statAbout.setGeometry(QtCore.QRect(939, 200, 300, 400))
+        self.statAbout.setReadOnly(True)
         self.statAbout.setStyleSheet(
-            "QLabel { font-size: 13px;color: #FEFE58; font-weight: bold;border: 2px solid gray;border-radius: 10px;}")
-        self.statAbout.setAlignment(Qt.AlignCenter)
-        self.statAbout.setWordWrap(True)
+            "QPlainTextEdit { font-size: 13px;color: #FEFE58; font-weight: bold;border: 2px solid gray;border-radius: 10px;}")
         self.userStatLabel = QtWidgets.QLabel(self.statisticsPage)
         self.userStatLabel.setGeometry(QtCore.QRect(280, 30, 391, 41))
         self.userStatLabel.setFont(font)
@@ -789,37 +792,14 @@ class Ui_MainWindow(object):
         self.exitButton.clicked.connect(self.exitButtonFunction)
         self.rankButton.clicked.connect(self.rankButtonFunction)
         self.adminPanelButton.clicked.connect(self.adminButtonFunction)
-        # self.betButton.clicked.connect(self.betButtonFunction)
-        # self.hitButton.clicked.connect(self.hitButtonFunction)
-        # self.standButton.clicked.connect(self.standButtonFunction)
         self.banButton.clicked.connect(self.adminBanButtonFunction)
         self.unbanButton.clicked.connect(self.adminUnbanButtonFunction)
         self.setAdminButton.clicked.connect(self.adminSetAdminButtonFunction)
         self.setUserButton.clicked.connect(self.adminSetUserButtonFunction)
         self.statButton.clicked.connect(self.statButtonFunction)
 
-        # testowy button
-        # self.setUserTestButton = QtWidgets.QPushButton(self.mainMenuPage)
-        # self.setUserTestButton.setGeometry(QtCore.QRect(1010, 670, 75, 23))
-        # self.setUserTestButton.setObjectName("setUserTestButton")
-        # self.setUserTestButton.setText('TEST')
-        # self.setUserTestButton.clicked.connect(self.testLoggedUsers)
-        #
-        self.addCardTestButton = QtWidgets.QPushButton(self.playPage)
-        self.addCardTestButton.setGeometry(QtCore.QRect(220, 670, 75, 23))
-        self.addCardTestButton.setObjectName("addCardTestButton")
-        self.addCardTestButton.setText('add')
-        self.addCardTestButton.clicked.connect(self.addCardTest)
-
-        self.removeCardTestButton = QtWidgets.QPushButton(self.playPage)
-        self.removeCardTestButton.setGeometry(QtCore.QRect(300, 670, 75, 23))
-        self.removeCardTestButton.setObjectName("removeCardTestButton")
-        self.removeCardTestButton.setText('remove')
-        self.removeCardTestButton.clicked.connect(self.removeCardTest)
-
         def ExitPls():
             if not self.MainWindow.isVisible():
-                print("EXITTTT PLS")
                 sys.exit()
         self.bruteExitTimer = QTimer()
         self.bruteExitTimer.timeout.connect(ExitPls)  # execute `display_time`
@@ -933,6 +913,8 @@ class Ui_MainWindow(object):
         self.LoginDialog = QtWidgets.QDialog()
         self.ui = Ui_LoginDialog(self.loggedUsers, index, stWid, username, avatar)
         self.ui.setupUi(self.LoginDialog)
+        self.LoginDialog.setWindowTitle("Login")
+        self.LoginDialog.setWindowFlags(Qt.WindowTitleHint | Qt.WindowCloseButtonHint)
         self.LoginDialog.exec()
 
     def logout(self, index, stWid):
@@ -945,6 +927,8 @@ class Ui_MainWindow(object):
         self.ManageDialog = QtWidgets.QDialog()
         self.ui = Ui_Dialog(user, avatar)
         self.ui.setupUi(self.ManageDialog)
+        self.ManageDialog.setWindowTitle("Manage")
+        self.ManageDialog.setWindowFlags(Qt.WindowTitleHint | Qt.WindowCloseButtonHint)
         self.ManageDialog.exec()
 
     def adminButtonFunction(self):
@@ -1003,11 +987,10 @@ class Ui_MainWindow(object):
 
     def playButtonFunction(self):
         self.stackedWidget.setCurrentWidget(self.setupPage)
-        print('setup game')
+        print('Setup game')
 
     def startGameButtonFunction(self):
         players = self.comboBox.getUsers()
-        print('players: ', players)
         if len(players) >= 2:
 
             users = []
@@ -1044,25 +1027,8 @@ class Ui_MainWindow(object):
                 skin = 'set1'
             else:
                 skin = 'set2'
-            print(game_start_data, skin)
 
-            print(users2)
             self.hands = UserHands(users2, skin, self.playPage)  # rysowanie
-            # TODO
-            # game_start_data daje startowe dane do rozpoczecia gry
-            # do przekazania do funkcji gry sa nastepujace obiekty:
-            # 1.    self.hands - zbior wszystkich rak + opisy, to sa te cale prostokaty
-            #       iterujac po liscie w tym obiekcie self.hands.hands[i] mozesz uzywac roznych funkcji
-            #       self.hands.hands[i].addCard('2karo') dodaje karte do uzytkownika o tym indeksie, iteruje sie od gory zgodnie z ruchem wskazowek
-            #       self.hands.removeCards() powinno usunac wszystkie karty z rak, do uzycia po zakonczonej rundzie
-            #       self.hands.hands[i].changeBorderColour('akcja') zmienia kolor obramowki, jesli 'loss' to czarno, jesli 'turn' niebiesko, 'wait' zolto, 'win' czerwono
-            #       czyli jak przegral, jego kolej, czeka na swoja ture, wygrany/remis na koncu
-            # 2. przyciski: self.betButton, self.hitButton, self.standButton
-            #       potem mozesz do nich clicked.connect(funkcja) zrobic do wylapywania ruchow
-            # 3. self.replayButton po zakonczonej grze niech sie pojawi show(), a przed giera hide() i tutaj bedzie potrzebne zapisywanie ruchow, najlepeij jakas lista w stylu:
-            #    [['uzyta funkcja do rysowania','index','karta-opcjonalnie'],[],[]] , przynajmniej cos takiego sobie wyobrazam, ze najlatwiej bedzie
-            # 4. self.exitButton jak wcisnie to powinno przejsc do setupPage i giere wylaczyc czy cos, nwm
-
             self.play_game(game_start_data)
 
         else:
@@ -1077,8 +1043,6 @@ class Ui_MainWindow(object):
         self.betButton.hide()
         self.hitButton.hide()
         self.standButton.hide()
-        self.addCardTestButton.hide()
-        self.removeCardTestButton.hide()
         self.betSlider.hide()
         self.exitButton.hide()
 
@@ -1087,12 +1051,10 @@ class Ui_MainWindow(object):
         self.betButton.setDisabled(True)
         self.hitButton.setDisabled(True)
         self.standButton.setDisabled(True)
-        self.addCardTestButton.setDisabled(True)
-        self.removeCardTestButton.setDisabled(True)
         self.betSlider.setDisabled(True)
         self.exitButton.setDisabled(True)
 
-        print('start game')
+        print('Start game')
         self.bruteExitTimer.start()
 
         t0 = time.time()
@@ -1105,7 +1067,6 @@ class Ui_MainWindow(object):
         db = blackjack.DataBase
         timeToMove = game_start_date['timeToMove']
         type = game_start_date['users']
-        print(type)
         numer_of_decks = game_start_date['numberOfDecks']
 
         players = []
@@ -1505,10 +1466,9 @@ class Ui_MainWindow(object):
 
                 for x in range(timeToMove):
                     QtTest.QTest.qWait(1000)
-                    print("waitin bet")
+                    print("Waiting for bet")
                     if self.betMove == True:
                         players[i].set_bet_player(self.betSlider.value())
-                        print("break")
                         break
 
                 self.bet_of_players[i] = players[i].get_bet()
@@ -1553,10 +1513,9 @@ class Ui_MainWindow(object):
                         self.card_box, self.card_cnt, self.shuffle_point = card_inc(self.card_box, 1, self.card_cnt,
                                                                                     self.shuffle_point,
                                                                                     numer_of_decks)
-                        print("xxxx   ", i, players[i])
                         players[i].hit(self.card_box)
                         self.hands.hands[i].addCard(players[i].last_card())
-                        print("HIT", i)
+                        print("HIT")
                         self.hands.hands[i].points.setText('Points: ' + str(players[i].get_points()))
                         points_of_pl.append(players[i].get_points())
                         self.hitButton.setDisabled(True)
@@ -1591,36 +1550,19 @@ class Ui_MainWindow(object):
                         self.standButton.hide()
                         print("STAND")
 
-                    '''
-                    def waitFun():
-                        print("start watku")
-                        while self.endMove == False:
-                            QtTest.QTest.qWait(100)
-                        print("koniec watku")
-
-                    thread = threading.Thread(target=waitFun, daemon=True)
-                    '''
-
                     self.timer.timeout.connect(standFun)
                     self.hitButton.clicked.connect(hitFun)
                     self.standButton.clicked.connect(standFun)
 
-                    # thread.start()
                     self.timer.start(timeToMove*1000)
                     self.hitButton.show()
                     self.standButton.show()
-                    # QtTest.QTest.qWait(60000)
-                    # print("prejoin")
-                    # thread.join()
-                    # print("afterjoin")
+
                     self.hitButton.setDisabled(False)
                     self.standButton.setDisabled(False)
-                    # glupie ale o dziwo dziala XD
                     for x in range(100):
                         QtTest.QTest.qWait(1000)
-                        print("waitin")
                         if self.endMove == True:
-                            print("break")
                             break
 
 
@@ -1701,8 +1643,8 @@ class Ui_MainWindow(object):
 
         self.replayButton.show()
         self.replayButton.setDisabled(False)
-        print(self.moves)
-        print(self.points_of_players)
+        #print(self.moves)
+        #print(self.points_of_players)
         self.replayButton.clicked.connect(lambda: self.replayButtonFunction())
         self.exitButton.show()
         self.exitButton.setDisabled(False)
@@ -1712,23 +1654,6 @@ class Ui_MainWindow(object):
         self.stackedWidget.setCurrentWidget(self.setupPage)
         print('exit game')
 
-    def betButtonFunction(self, Player, value):
-        Player.set_bet_player(value)
-        self.betButton.hide()
-        self.betSlider.hide()
-        self.betLabel.hide()
-        print('bet')
-
-    def hitButtonFunction(self):
-        self.check_value = True
-        print(self.check_value)
-        print('hit')
-
-    def standButtonFunction(self):
-        self.check_value = False
-        print(self.check_value)
-        print('stand')
-
     def replayButtonFunction(self):
         self.exitButton.hide()
         self.replayButton.hide()
@@ -1736,7 +1661,7 @@ class Ui_MainWindow(object):
         self.replayButton.setDisabled(True)
         print(self.moves)
         print(self.points_of_players)
-        self.removeCardTest()
+        self.hands.removeCards()
         values = list(self.moves.values())
 
         for i in range(len(values)):
@@ -1780,7 +1705,7 @@ class Ui_MainWindow(object):
         self.rankingList.setModel(self.rankingListModel)
         self.rankingList.selectRow(0)
         self.stackedWidget.setCurrentWidget(self.rankingPage)
-        print('show actual ranking, by money')
+        print('Show actual ranking, by money')
 
     def statButtonFunction(self):
         username = self.rankingList.selectionModel().currentIndex().siblingAtColumn(0).data()
@@ -1815,25 +1740,10 @@ class Ui_MainWindow(object):
 
         pixmap = QPixmap('images/avatars/' + str(player["avatar"])).scaled(100, 100)
         self.statAvatar.setPixmap(pixmap)
-        self.statAbout.setText(str(player["description"]))
-        self.statAbout.setWordWrap(True)
+        self.statAbout.setPlainText(str(player["description"]))
         self.userStatLabel.setText('Statistics of ' + username)
         self.stackedWidget.setCurrentWidget(self.statisticsPage)
-        print('stats of selected user')
-
-    def testLoggedUsers(self):
-        print()
-        print('index, Username, avatar, isAdmin')
-        for i in range(5):
-            print(i, self.loggedUsers[i].username, self.loggedUsers[i].avatar, self.loggedUsers[i].isAdmin)
-
-    def addCardTest(self):
-        # print('add card')
-        for i in range(len(self.hands.hands)):
-            self.hands.hands[i].addCard('club_2')
-
-    def removeCardTest(self):
-        self.hands.removeCards()
+        print('Stats of selected user', username)
 
 
 class LoggedUser(object):
@@ -1913,12 +1823,8 @@ class UserHand(QtWidgets.QFrame):
         self.setStyleSheet(
             "#myframe {border: 5px solid #FEFE58} QFrame {background-color: #CFABDB; font-size: 12px;color: #FEFE58; font-weight: bold;}")
         r = 240  # ustawianie miejsca
-        a = 300
-        b = 500
-        # TODO nwm spolrzedne biegunowe/eliptyczne, przy 5 troche za ciasno wyglada
         self.x = math.floor(-r * math.cos(math.pi / 2 + angle * index) + 620)
         self.y = math.floor(-r * math.sin(math.pi / 2 + angle * index) + 327)
-        print('x ', self.x, ', y ', self.y)
         self.setGeometry(QtCore.QRect(self.x - 150, self.y - 80, 300, 170))  # x,y  1240, 672 tyle ma obraz stolu
         self.vBox = QtWidgets.QVBoxLayout(self)  # main vbox
         self.vBox.setAlignment(Qt.AlignCenter)
@@ -1964,7 +1870,6 @@ class UserHand(QtWidgets.QFrame):
         self.card.setPixmap(self.pixmapCard)
         self.card.hide()
         self.hBox.addWidget(self.card)
-        # print('pos in hbox ', self.card.pos())
 
         cardTemp = AnimatedCard(self.skin, self.card, self.animParent)  # to dziala
         cardTemp.animate(cardname, self.x - 40, self.y - 70)
@@ -1974,7 +1879,6 @@ class UserHand(QtWidgets.QFrame):
             child = self.hBox.takeAt(0)
             if child.widget():
                 child.widget().deleteLater()
-                # print("delete")
 
     def setPoints(self, points):
         self.points.setText(str(points))
@@ -2070,7 +1974,6 @@ class ComboBox(QtWidgets.QComboBox):
                 logg.append(el.username)
 
         # wyczysc left i inuse jesli juz nie zalogowani
-        print(logg)
         for el in self.dataLeft:
             if el not in logg:
                 self.dataLeft.remove(el)
@@ -2083,8 +1986,6 @@ class ComboBox(QtWidgets.QComboBox):
             if el not in self.dataInUse and el not in self.dataLeft:
                 self.dataLeft.append(el)
 
-        # print('InUse ', self.dataInUse)
-        # print('Left ', self.dataLeft)
         self.clear()
 
         lista = ['None'] + self.dataLeft + ['AI(easy)', 'AI(medium)', 'AI(hard)']
@@ -2098,8 +1999,6 @@ class ComboBox(QtWidgets.QComboBox):
         super(ComboBox, self).showPopup()
 
     def updateMe(self):
-        # print('poprz ', self.tempTxt)
-        # print('wybralem ', self.currentText())
         if self.tempTxt in self.dataInUse:
             self.dataInUse.remove(self.tempTxt)
             self.dataLeft.append(self.tempTxt)
@@ -2107,8 +2006,6 @@ class ComboBox(QtWidgets.QComboBox):
             self.dataLeft.remove(self.currentText())
             self.dataInUse.append(self.currentText())
         self.tempTxt = self.currentText()
-        # print('InUse 2 ', self.dataInUse)
-        # print('Left 2 ', self.dataLeft)
 
 
 if __name__ == "__main__":
@@ -2119,4 +2016,5 @@ if __name__ == "__main__":
     ui = Ui_MainWindow()
     ui.setupUi(MainWindow)
     MainWindow.show()
+    MainWindow.setWindowTitle("Blackjack")
     sys.exit(app.exec_())
